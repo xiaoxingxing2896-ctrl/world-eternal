@@ -637,3 +637,193 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
 }
 .modal-form input:focus,.modal-form select:focus,.modal-form textarea:focus{border-color:var(--accent)}
 .form-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:8px}
+/* =========================================================
+   facilities.html · 与云中城设施页同构的样式
+   （信息架构同云中城，主题与动效保持本站 Cloudflare 风格）
+   ========================================================= */
+.facilities-hero{
+  position:relative;z-index:1;text-align:center;
+  padding:180px 40px 60px;overflow:hidden;
+}
+
+/* 操作工具条 */
+.toolbar{
+  position:relative;z-index:2;max-width:1200px;margin:0 auto;
+  padding:0 24px 20px;
+}
+.toolbar-inner{
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:16px;
+  padding:16px 20px;
+}
+.toolbar-left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;flex:1}
+.toolbar-right{display:flex;gap:10px;flex-wrap:wrap}
+.search-input{
+  min-width:240px;flex:1;max-width:360px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;
+  color:var(--text);padding:10px 16px;font-size:14px;font-family:inherit;
+  outline:none;transition:border-color .2s;
+}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--text-dim)}
+
+/* 主体 */
+.facilities-main{
+  position:relative;z-index:1;max-width:1200px;margin:0 auto;
+  padding:10px 24px 90px;display:grid;grid-template-columns:1fr;gap:40px;
+}
+
+/* 路网面板 */
+.map-panel{padding:0}
+.map-panel .map-toolbar{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;
+  padding:22px 24px 16px;border-bottom:1px solid var(--border);
+}
+.map-title{font-size:22px;font-weight:800;margin-top:6px}
+.map-count{font-size:13px;color:var(--text-dim)}
+.map-tip{
+  padding:14px 24px;font-size:13px;color:var(--text-dim);
+  border-top:1px solid var(--border);
+}
+.map-label{fill:var(--text-dim);font-size:13px;font-weight:600;pointer-events:none}
+
+/* 列表标题 */
+.list-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  border-bottom:1px solid var(--border);padding-bottom:14px;
+}
+.list-head h2{font-size:22px;font-weight:800}
+.list-count{font-size:13px;color:var(--text-dim)}
+
+/* 设施卡片（云中城字段：名称/世界/分类/负责人/产出/提示/坐标/依赖/接驳） */
+.facility-list{display:flex;flex-direction:column;gap:16px}
+.facility-card{cursor:pointer;padding:24px 26px}
+.facility-card.flash{
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px rgba(246,130,31,.35), var(--shadow);
+}
+.facility-head{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  gap:12px;flex-wrap:wrap;margin-bottom:14px;
+}
+.facility-title{display:flex;align-items:center;gap:14px}
+.facility-icon{
+  width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(246,130,31,.16),rgba(14,165,233,.12));
+  border:1px solid var(--border-strong);
+}
+.facility-title h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.owner-inline{font-size:13px;color:var(--text-dim);font-weight:500}
+.facility-tags{display:flex;gap:8px;flex-wrap:wrap}
+.facility-world{
+  font-size:12px;color:var(--accent-2);
+  background:rgba(246,130,31,.1);border:1px solid rgba(246,130,31,.3);
+  padding:2px 10px;border-radius:999px;
+}
+.facility-cat{
+  font-size:12px;color:#7dd3fc;
+  background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.3);
+  padding:2px 10px;border-radius:999px;
+}
+.facility-actions{display:flex;align-items:center;gap:8px}
+.owner-chip{
+  font-size:12.5px;color:var(--accent-2);
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  padding:5px 12px;border-radius:999px;transition:.2s;
+}
+.owner-chip:hover{border-color:var(--accent);color:var(--text)}
+.icon-btn{
+  width:32px;height:32px;border-radius:8px;display:grid;place-items:center;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  font-size:14px;transition:.2s;opacity:.7;
+}
+.icon-btn:hover{opacity:1;border-color:#ef4444;background:rgba(239,68,68,.15)}
+
+/* 产出行 */
+.facility-output{
+  display:flex;align-items:flex-start;gap:10px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:10px;padding:10px 14px;margin-bottom:12px;flex-wrap:wrap;
+}
+.field-key{
+  font-size:12px;font-weight:700;color:var(--text-dim);
+  flex-shrink:0;line-height:24px;min-width:2.5em;
+}
+.field-val{display:flex;flex-wrap:wrap;gap:6px}
+.out-chip{
+  font-size:12.5px;color:var(--text);
+  background:rgba(246,130,31,.12);border:1px solid rgba(246,130,31,.28);
+  padding:3px 11px;border-radius:999px;
+}
+
+/* 提示 */
+.facility-tips{
+  display:flex;gap:10px;margin-bottom:12px;
+  font-size:14px;color:var(--text-dim);
+}
+.facility-tips p{flex:1;line-height:1.6}
+
+/* 坐标 / 依赖 */
+.facility-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.meta-chip{
+  font-size:12.5px;color:var(--text-dim);
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  padding:5px 12px;border-radius:8px;
+}
+
+/* 接驳 */
+.facility-transport{
+  display:flex;gap:10px;
+  font-size:13.5px;color:var(--text-dim);
+  background:rgba(14,165,233,.07);border-left:3px solid #0ea5e9;
+  padding:11px 14px;border-radius:0 8px 8px 0;
+}
+.facility-transport p{flex:1;line-height:1.6}
+
+/* 空状态 */
+.list-empty{
+  position:relative;z-index:1;text-align:center;color:var(--text-dim);
+  padding:50px 0;font-size:15px;
+}
+
+/* ---------- 弹窗（修复版：class 控制显示） ---------- */
+.modal-overlay{
+  position:fixed;inset:0;z-index:400;background:rgba(3,4,6,.78);
+  display:none;place-items:center;padding:20px;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  animation:fadeIn .25s ease;
+}
+.modal-overlay.open{display:grid}
+.modal{
+  width:min(640px,100%);max-height:88vh;overflow-y:auto;
+  background:#11131b;border:1px solid var(--border-strong);border-radius:18px;
+  padding:28px 30px;box-shadow:var(--shadow);
+}
+.modal-head{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;
+}
+.modal-head h3{font-size:20px;font-weight:800}
+.modal-close{
+  width:34px;height:34px;border-radius:9px;display:grid;place-items:center;
+  background:rgba(255,255,255,.06);border:1px solid var(--border);
+  font-size:15px;transition:.2s;
+}
+.modal-close:hover{background:rgba(239,68,68,.15);border-color:#ef4444}
+.modal-form{display:flex;flex-direction:column;gap:14px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal-form label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--text-dim)}
+.req{color:#ef4444}
+.modal-form input,.modal-form select,.modal-form textarea{
+  background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:9px;
+  color:var(--text);padding:9px 13px;font-size:14px;font-family:inherit;outline:none;
+  transition:border-color .2s;resize:vertical;
+}
+.modal-form input:focus,.modal-form select:focus,.modal-form textarea:focus{border-color:var(--accent)}
+.form-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:8px}
+
+@media (max-width:640px){
+  .form-row{grid-template-columns:1fr}
+  .toolbar-inner{flex-direction:column;align-items:stretch}
+  .toolbar-left,.toolbar-right{width:100%}
+  .search-input{max-width:none}
+}
