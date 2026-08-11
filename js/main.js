@@ -139,20 +139,10 @@ function apply(s){
 }
 
 function refreshStatus(){
-  const url=CONFIG.planBase+'/v1/graph?type=optimizedPerformance&server='+CONFIG.planServerId;
-  fetch(url,{mode:'cors'})
-    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-    .then(d=>{
-      if(!d || !Array.isArray(d.values) || !d.values.length) throw new Error('values 为空');
-      const last=d.values[d.values.length-1];
-      apply({ online:true, players:{online:last[1]||0, max:CONFIG.maxPlayers}, tps:last[2] });
-    })
-    .catch(err=>{
-      /* 出错时把原因直接显示在页面 */
-      apply({online:false});
-      const note=document.querySelector('.status-note');
-      if(note) note.textContent='[错误] '+err.message;
-    });
+  fetch(CONFIG.workerUrl)
+    .then(r=>r.json())
+    .then(s=>apply(s))
+    .catch(()=>apply({online:false}));
 }
 /* ---------- 3D 倾斜（仅桌面 hover 设备） ---------- */
 if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
