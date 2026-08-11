@@ -8,6 +8,8 @@ const CONFIG = {
   qqGroup:'https://qm.qq.com/q/YOUR_GROUP_CODE',
   feedbackUrl:'mailto:admin@worldeternal.xyz',
   mapUrl:'https://map.worldeternal.xyz',
+  planBase:'https://api.worldeternal.xyz',
+  planServerId:'f9cf3fdd-4217-4f2b-9a44-413ecf0ef464',
   statusApi:'',
   statusPingApi:'',
   refreshInterval:10000,
