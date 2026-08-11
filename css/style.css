@@ -1,5 +1,5 @@
 /* =========================================================
-   云屿 CloudIsle · 参考 Cloudflare Connect 视觉风格
+   一辈子存档 WorldEternal · 参考 Cloudflare Connect 视觉风格
    桌面端 + 移动端响应式
    ========================================================= */
 
@@ -76,6 +76,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
   background:rgba(255,255,255,.05);border-color:var(--border-strong);color:var(--text);
 }
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent-2);transform:translateY(-2px)}
+.btn-sm{padding:9px 16px;font-size:14px}
 .ripple{
   position:absolute;border-radius:50%;background:rgba(255,255,255,.45);
   transform:scale(0);animation:ripple .6s ease-out;pointer-events:none;
@@ -183,6 +184,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
 
 .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
 .dot-green{background:#34d399;box-shadow:0 0 12px rgba(52,211,153,.8)}
+.dot-gray{background:#6b7280}
 .pulse{animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}50%{box-shadow:0 0 0 7px rgba(52,211,153,0)}}
 
@@ -261,7 +263,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
 
 /* ---------- 数据统计 ---------- */
 .stats{
-  position:relative;z-index:1;display:flex;justify-content:center;gap:clamp(30px,6vw,90px);
+  position:relative;z-index:1;display:flex;justify-content:center;gap:clamp(40px,10vw,140px);
   padding:70px 30px;flex-wrap:wrap;text-align:center;
 }
 .stat-num{
@@ -283,50 +285,31 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
 .card h3{font-size:19px;font-weight:700;margin-bottom:10px}
 .card p{color:var(--text-dim);font-size:14.5px}
 
-/* ---------- 状态区 ---------- */
-.status-wrap{
-  display:grid;grid-template-columns:minmax(340px,430px) 1fr;gap:24px;
-  max-width:1200px;margin:0 auto;align-items:stretch;
+/* ---------- 实时状态（单卡） ---------- */
+.status-solo{max-width:660px;margin:0 auto;text-align:center;padding:36px 34px}
+.status-head{
+  display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:30px;
 }
-.status-card{display:flex;flex-direction:column}
-.status-top{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.status-label{font-weight:700;font-size:17px}
-.status-ping{margin-left:auto;color:var(--text-dim);font-size:13px}
-.status-ip{
-  font-family:ui-monospace,Menlo,monospace;font-size:clamp(20px,2.4vw,28px);font-weight:800;
-  padding:18px 20px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);
-  margin-bottom:20px;letter-spacing:.01em;
+.status-label{font-weight:800;font-size:22px}
+.status-live-tag{
+  font-size:12px;color:var(--text-dim);letter-spacing:.08em;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  padding:4px 12px;border-radius:999px;
 }
-.status-meta{
-  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px;
+.metric-row{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
 }
-.meta-item{
-  background:rgba(255,255,255,.035);border:1px solid var(--border);border-radius:12px;padding:12px 14px;
+.metric{
+  background:rgba(255,255,255,.035);border:1px solid var(--border);border-radius:14px;
+  padding:22px 14px;
 }
-.meta-key{display:block;font-size:12px;color:var(--text-dim);letter-spacing:.08em;margin-bottom:4px}
-.meta-val{font-size:16px;font-weight:700}
-.status-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.status-note{font-size:12.5px;color:var(--text-dim);opacity:.8}
-
-.quick-tools{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.tool-card{
-  display:flex;align-items:center;gap:14px;padding:22px;
-  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-  transition:transform .3s,border-color .3s,background .3s,box-shadow .3s;
+.metric-key{display:block;font-size:12.5px;color:var(--text-dim);letter-spacing:.1em;margin-bottom:8px}
+.metric-val{
+  font-size:clamp(28px,4vw,38px);font-weight:900;line-height:1;
+  background:var(--grad-text);-webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.tool-card:hover{
-  transform:translateY(-5px);border-color:var(--border-strong);
-  background:var(--card-hover);box-shadow:var(--shadow);
-}
-.tool-icon{
-  width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:21px;flex-shrink:0;
-  background:linear-gradient(135deg,rgba(246,130,31,.16),rgba(14,165,233,.12));
-  border:1px solid var(--border-strong);
-}
-.tool-card h3{font-size:16px;font-weight:700;margin-bottom:3px}
-.tool-card p{font-size:13px;color:var(--text-dim)}
-.tool-arrow{margin-left:auto;color:var(--accent);font-size:18px;opacity:0;transform:translateX(-6px);transition:.25s}
-.tool-card:hover .tool-arrow{opacity:1;transform:translateX(0)}
+.metric-unit{font-size:12.5px;color:var(--text-dim);margin-left:4px}
+.status-note{margin-top:22px;font-size:12.5px;color:var(--text-dim);opacity:.85}
 
 /* ---------- 时间线 ---------- */
 .timeline{max-width:760px;margin:0 auto;position:relative}
@@ -354,7 +337,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
 .timeline-link{color:var(--accent);font-weight:600;font-size:14.5px;transition:color .2s}
 .timeline-link:hover{color:var(--accent-2)}
 
-/* ---------- 地图 ---------- */
+/* ---------- 交互式路网 ---------- */
 .map-card{max-width:980px;margin:0 auto;padding:0;overflow:hidden}
 .map-toolbar{
   display:flex;align-items:center;justify-content:space-between;gap:16px;
@@ -401,7 +384,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
 .map-info-detail p{font-size:14px;color:var(--text-dim)}
 .map-info-route{margin-left:auto;font-size:13px;color:var(--accent-2);white-space:nowrap}
 
-/* ---------- 实时地图 ---------- */
+/* ---------- 实时卫星地图 ---------- */
 .map-frame{max-width:980px;margin:0 auto;padding:0;display:grid;place-items:center;min-height:380px}
 .map-frame-placeholder{text-align:center;padding:50px 30px}
 .map-frame-placeholder h3{font-size:22px;margin-bottom:10px}
@@ -450,30 +433,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
 .acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
 .acc-body-inner{padding:0 22px 22px;color:var(--text-dim);font-size:14.5px}
 
-/* ---------- 价格卡片 ---------- */
-.price-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
-  max-width:1100px;margin:0 auto;align-items:stretch;
-}
-.price-card{display:flex;flex-direction:column;padding:34px 30px}
-.price-card.featured{
-  border-color:var(--accent);
-  background:linear-gradient(180deg,rgba(246,130,31,.12),rgba(255,255,255,.03));
-  box-shadow:0 0 60px rgba(246,130,31,.14);
-  position:relative;
-}
-.featured-badge{
-  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
-  background:var(--grad);color:#1a0d00;font-size:12px;font-weight:800;
-  padding:5px 16px;border-radius:999px;white-space:nowrap;
-}
-.price-tier{font-size:14px;font-weight:700;letter-spacing:.08em;color:var(--accent-2);margin-bottom:8px}
-.price{font-size:46px;font-weight:900;line-height:1;margin-bottom:24px}
-.price span{font-size:15px;font-weight:500;color:var(--text-dim)}
-.price-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:30px;flex:1}
-.price-list li{font-size:14.5px;color:var(--text-dim);display:flex;align-items:center;gap:10px}
-.price-btn{width:100%}
-
 /* ---------- 页脚 ---------- */
 .footer{
   position:relative;z-index:1;border-top:1px solid var(--border);
@@ -507,12 +466,11 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
 /* =========================================================
-   移动端适配（Cloudflare 式移动布局：单列堆叠、抽屉菜单）
+   移动端适配
    ========================================================= */
 @media (max-width:1024px){
   .cards-grid{grid-template-columns:repeat(2,1fr)}
   .rules-grid{grid-template-columns:repeat(2,1fr)}
-  .price-grid{grid-template-columns:repeat(3,1fr)}
   .footer-main{grid-template-columns:1fr 1fr}
 }
 
@@ -530,11 +488,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
   .section-head{margin-bottom:44px}
 
   .cards-grid{grid-template-columns:1fr;gap:16px}
-  .status-wrap{grid-template-columns:1fr}
-  .quick-tools{grid-template-columns:1fr}
   .rules-grid{grid-template-columns:1fr;gap:14px}
-  .price-grid{grid-template-columns:1fr;gap:18px;max-width:420px}
-  .price-card.featured{order:-1}
+  .metric-row{grid-template-columns:1fr}
 
   .timeline::before{left:22px}
   .timeline-num{width:46px;height:46px;font-size:15px}
@@ -555,9 +510,6 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(255
 }
 
 @media (max-width:420px){
-  .cards-grid,.quick-tools{grid-template-columns:1fr}
   .hero h1{font-size:38px}
-  .status-meta{grid-template-columns:1fr}
-  .stats{gap:26px}
-  .stat{min-width:120px}
+  .stats{gap:34px}
 }
