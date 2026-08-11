@@ -145,7 +145,8 @@ function refreshStatus(){
       apply({
         online:true,
         players:{online:last[1]||0, max:CONFIG.maxPlayers},   // playersOnline
-        tps:last[2],                                          // tps
+        tps:last[2],      // tps
+        cpu:last[3],      //cpu
       });
     })
     .catch(()=>apply({online:false}));
