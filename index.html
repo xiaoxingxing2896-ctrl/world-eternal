@@ -62,12 +62,13 @@
       </a>
     </div>
 
-    <div class="sidebar-foot">
+     <div class="sidebar-foot">
       <a href="#guide" class="btn btn-primary" data-scroll>立即加入</a>
+      <button class="btn btn-ghost btn-sm" onclick="openQQGroup()">💬 玩家 QQ 群</button>
       <button class="btn btn-ghost btn-sm" id="sidebarCopyIp">📋 worldeternal.xyz</button>
     </div>
   </aside>
-
+  
   <!-- ===== Hero ===== -->
   <section class="hero" id="hero">
     <div class="hero-aurora"></div>
@@ -151,7 +152,7 @@
         <div class="metric"><span class="metric-label">在线玩家</span><span class="metric-val" id="statusPlayers">--</span><span class="metric-unit">人</span></div>
         <div class="metric"><span class="metric-label">TPS</span><span class="metric-val" id="statusTps">--</span><span class="metric-unit">/ 20</span></div>
       </div>
-      <p class="status-note">地址：<code>worldeternal.xyz</code> · 数据来自 ServerTap + mcstatus.io</p>
+      <p class="status-note">地址：<code>worldeternal.xyz</code> · 数据来自 Plan + mcstatus.io</p>
     </div>
   </section>
 
@@ -255,11 +256,6 @@
         <a href="#livemap">实时卫星地图</a>
         <a href="#faq">常见问题</a>
       </div>
-      <div class="footer-col">
-        <h4>社区</h4>
-        <a href="#" data-href="qq">玩家 QQ 群</a>
-        <a href="#" data-href="feedback">反馈工单</a>
-      </div>
     </div>
     <div class="footer-bottom">
       <span>© <span id="year">2025</span> 一辈子存档 WorldEternal</span>
@@ -269,6 +265,6 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="js/main.js?v=20260812"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
