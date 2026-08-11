@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>云屿 CloudIsle · 纯净生存 Minecraft 服务器</title>
+  <meta name="description" content="云屿 CloudIsle —— 公益纯净生存 MC 服务器。无圈地、生电友好、Java/基岩互通、离线可进。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== 全局背景装饰 ===== -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="bg-grid"></div>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+
+  <!-- ===== 导航栏 ===== -->
+  <header class="navbar" id="navbar">
+    <a class="brand" href="#hero">
+      <span class="brand-mark">⬢</span>
+      <span class="brand-name">云屿 <em>CloudIsle</em></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#hero">首页</a>
+      <a href="#features">特色</a>
+      <a href="#status">状态</a>
+      <a href="#guide">入服指南</a>
+      <a href="#map">路网地图</a>
+      <a href="#rules">规则</a>
+      <a href="#support">赞助</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#guide" class="btn btn-primary nav-cta">立即加入</a>
+      <button class="hamburger" id="hamburger" aria-label="打开菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="mobile-menu" id="mobileMenu">
+    <nav>
+      <a href="#hero">首页</a>
+      <a href="#features">特色</a>
+      <a href="#status">服务器状态</a>
+      <a href="#guide">入服指南</a>
+      <a href="#map">路网地图</a>
+      <a href="#rules">规则</a>
+      <a href="#support">赞助</a>
+    </nav>
+    <a href="#guide" class="btn btn-primary mobile-cta">立即加入</a>
+  </div>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-aurora"></div>
+
+    <!-- 漂浮的方块 -->
+    <div class="block block-grass b1"></div>
+    <div class="block block-diamond b2"></div>
+    <div class="block block-stone b3"></div>
+    <div class="block block-tnt b4"></div>
+
+    <div class="hero-inner">
+      <span class="hero-badge reveal">公益 · 纯净生存 · 无圈地 · 生电友好</span>
+      <h1 class="reveal">云端之上，<span class="gradient-text">方寸筑梦</span></h1>
+      <p class="hero-sub reveal">
+        云屿 · CloudIsle 是一个以纯净生存为核心的公益 Minecraft 服务器。<br class="pc-only">
+        Java / 基岩互通、离线可进，回归最纯粹的方块乐趣。
+      </p>
+      <div class="hero-actions reveal">
+        <a href="#guide" class="btn btn-primary">🎮 加入服务器</a>
+        <button class="btn btn-ghost" id="heroCopyIp">📋 复制地址</button>
+      </div>
+
+      <!-- 实时状态小卡 -->
+      <div class="hero-live reveal" id="heroLive">
+        <span class="dot dot-green"></span>
+        <span id="heroStatusText">在线</span>
+        <span class="sep">·</span>
+        <span>玩家 <b id="heroPlayers">0</b>/<span id="heroMax">120</span></span>
+        <span class="sep">·</span>
+        <span>TPS <b id="heroTps">20.0</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 关键词跑马灯 ===== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>纯净生存</span><i>✦</i><span>无圈地</span><i>✦</i><span>生电友好</span><i>✦</i>
+      <span>Java / 基岩互通</span><i>✦</i><span>离线可进</span><i>✦</i><span>公益运营</span><i>✦</i>
+      <span>纯净生存</span><i>✦</i><span>无圈地</span><i>✦</i><span>生电友好</span><i>✦</i>
+      <span>Java / 基岩互通</span><i>✦</i><span>离线可进</span><i>✦</i><span>公益运营</span><i>✦</i>
+    </div>
+  </div>
+
+  <!-- ===== 数据统计 ===== -->
+  <section class="stats">
+    <div class="stat reveal"><div class="stat-num" data-count="3">0</div><div class="stat-label">年运营</div></div>
+    <div class="stat reveal"><div class="stat-num" data-count="1200">0</div><div class="stat-label">注册玩家</div></div>
+    <div class="stat reveal"><div class="stat-num" data-count="120">0</div><div class="stat-label">在线峰值</div></div>
+    <div class="stat reveal"><div class="stat-num" data-count="99">0</div><div class="stat-label">% 在线率</div></div>
+  </section>
+
+  <!-- ===== 服务器特色 ===== -->
+  <section class="section" id="features">
+    <div class="section-head reveal">
+      <span class="eyebrow">WHY CLOUDISLE</span>
+      <h2>为纯粹生存而设计的 <span class="gradient-text">每一处细节</span></h2>
+      <p>没有花哨的氪金系统，只有原汁原味的方块世界。</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card tilt reveal">
+        <div class="card-icon">🌲</div>
+        <h3>纯净生存</h3>
+        <p>无 RNG、无氪金、无强制任务。原版机制，难度适中，回归最初的生存体验。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">🏗️</div>
+        <h3>无圈地</h3>
+        <p>全图自由建造，杜绝占坑摆烂。文明建造、互相尊重，让世界真正属于每个人。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">⚙️</div>
+        <h3>生电友好</h3>
+        <p>高频红石、刷怪塔、TNT 复制全面开放（合规申报），单机玩法的极限在这里也能实现。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">🔗</div>
+        <h3>Java / 基岩互通</h3>
+        <p>通过 Geyser 桥接双端同服。手机、电脑、主机玩家在同一片大陆共同冒险。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">🛡️</div>
+        <h3>离线可进</h3>
+        <p>无需正版即可畅玩，同时提供账号安全保护，防止盗号与被冒名。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">🛰️</div>
+        <h3>反作弊护航</h3>
+        <p>多维度行为检测 + 人工复核，外挂零容忍，公平环境由技术与社区共同守护。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 服务器状态 + 快捷工具（实用区） ===== -->
+  <section class="section" id="status">
+    <div class="section-head reveal">
+      <span class="eyebrow">SERVER STATUS</span>
+      <h2>实时状态 · <span class="gradient-text">一键入服</span></h2>
+      <p>连接信息、状态监控与常用入口，一站搞定。</p>
+    </div>
+
+    <div class="status-wrap">
+      <div class="card status-card reveal">
+        <div class="status-top">
+          <span class="dot dot-green pulse" id="statusDot"></span>
+          <span class="status-label" id="statusText">在线</span>
+          <span class="status-ping" id="statusPing">~12ms</span>
+        </div>
+        <div class="status-ip" id="statusIp">play.cloudisle.example</div>
+        <div class="status-meta">
+          <div class="meta-item">
+            <span class="meta-key">玩家</span>
+            <span class="meta-val"><b id="statusPlayers">0</b> / <span id="statusMax">120</span></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-key">TPS</span>
+            <span class="meta-val" id="statusTps">20.0</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-key">版本</span>
+            <span class="meta-val" id="statusVersion">1.20.x - 1.21.x</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-key">模式</span>
+            <span class="meta-val">纯净生存</span>
+          </div>
+        </div>
+        <div class="status-actions">
+          <button class="btn btn-primary" id="copyIpBtn">📋 复制服务器地址</button>
+          <a class="btn btn-ghost" href="#guide">查看入服指南</a>
+        </div>
+        <p class="status-note">地址变更 / 维护信息会第一时间在玩家群公告。</p>
+      </div>
+
+      <div class="quick-tools">
+        <a class="tool-card tilt reveal" href="#" data-href="quiz" target="_blank" rel="noopener">
+          <div class="tool-icon">📝</div>
+          <div><h3>白名单答题</h3><p>在线完成考核，获取准入资格</p></div>
+          <span class="tool-arrow">→</span>
+        </a>
+        <a class="tool-card tilt reveal" href="#" data-href="qq" target="_blank" rel="noopener">
+          <div class="tool-icon">💬</div>
+          <div><h3>入服门户群</h3><p>扫码进群，与 1000+ 玩家同游</p></div>
+          <span class="tool-arrow">→</span>
+        </a>
+        <a class="tool-card tilt reveal" href="#" data-href="docs" target="_blank" rel="noopener">
+          <div class="tool-icon">📖</div>
+          <div><h3>入服教程文档</h3><p>常见问题与新手指引</p></div>
+          <span class="tool-arrow">→</span>
+        </a>
+        <a class="tool-card tilt reveal" href="#" data-href="feedback">
+          <div class="tool-icon">🛠️</div>
+          <div><h3>反馈与工单</h3><p>举报、建议、申诉统一入口</p></div>
+          <span class="tool-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 入服指南（时间线） ===== -->
+  <section class="section" id="guide">
+    <div class="section-head reveal">
+      <span class="eyebrow">GETTING STARTED</span>
+      <h2>三步启程，<span class="gradient-text">建立你的自由秩序</span></h2>
+      <p>从注册到入服，全程不超过十分钟。</p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-num">01</div>
+        <div class="timeline-body">
+          <h3>注册与绑定</h3>
+          <p>进入登录服，完成账号注册与邮箱绑定，保障你的存档与财产。</p>
+          <span class="timeline-tag">约 2 分钟</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-num">02</div>
+        <div class="timeline-body">
+          <h3>白名单考核</h3>
+          <p>前往网页答题系统完成简单测试，获取生存服准入资格。</p>
+          <a class="timeline-link" href="#" data-href="quiz">开始答题 →</a>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-num">03</div>
+        <div class="timeline-body">
+          <h3>融入社区</h3>
+          <p>在入服教程底部扫码加入专属玩家交流群，认领你的第一个家。</p>
+          <a class="timeline-link" href="#" data-href="qq">加入玩家群 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 交互式路网地图 ===== -->
+  <section class="section" id="map">
+    <div class="section-head reveal">
+      <span class="eyebrow">INTERACTIVE TOPOLOGY</span>
+      <h2>全景交互式路网</h2>
+      <p>主世界与地狱的全维度交通网络，点击站点查看线路详情。</p>
+    </div>
+
+    <div class="map-card card reveal">
+      <div class="map-toolbar">
+        <div class="tabs" id="mapTabs">
+          <button class="tab active" data-net="overworld">🌍 主世界</button>
+          <button class="tab" data-net="nether">🔥 地狱</button>
+        </div>
+        <span class="map-hint">点击站点查看详情</span>
+      </div>
+      <div class="map-stage">
+        <svg id="mapSvg" viewBox="0 0 800 470" role="img" aria-label="服务器交通路网"></svg>
+      </div>
+      <div class="map-info" id="mapInfo">
+        <div class="map-info-empty">👆 选择一个站点</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 实时卫星地图 ===== -->
+  <section class="section" id="livemap">
+    <div class="section-head reveal">
+      <span class="eyebrow">SATELLITE VIEW</span>
+      <h2>实时卫星地图</h2>
+      <p>上帝视角，实时俯瞰广袤的云屿地貌与玩家足迹。</p>
+    </div>
+    <div class="card map-frame reveal" id="mapFrame">
+      <div class="map-frame-placeholder" id="mapPlaceholder">
+        <div class="radar"></div>
+        <h3>在线地图已就绪</h3>
+        <p>部署后请在 <code>js/main.js</code> 的 <code>CONFIG.mapUrl</code> 填入你的 Dynmap / BlueMap 地址。</p>
+        <a class="btn btn-primary" href="#" data-href="map" id="openMapBtn">打开实时地图 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 服务器规则 ===== -->
+  <section class="section" id="rules">
+    <div class="section-head reveal">
+      <span class="eyebrow">COMMUNITY RULES</span>
+      <h2>简明 <span class="gradient-text">社区公约</span></h2>
+      <p>自由之上，是相互尊重。寥寥数条，人人遵守。</p>
+    </div>
+    <div class="rules-grid">
+      <div class="rule-card reveal"><span class="rule-num">01</span><p>尊重他人，禁止恶意破坏、偷窃与欺骗。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">02</span><p>禁止使用外挂与恶意作弊，本服内置反作弊系统。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">03</span><p>无圈地制下请文明建造，请勿长期占用大面积空地。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">04</span><p>高频红石与 TNT 复制请先申报，做好防卡顿设计。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">05</span><p>公共频道禁止刷屏、引战与人身攻击。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">06</span><p>服从管理协调，纠纷可通过工单系统申诉复核。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section section-narrow" id="faq">
+    <div class="section-head reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2>常见 <span class="gradient-text">问题</span></h2>
+    </div>
+    <div class="accordion" id="faqList">
+      <div class="acc-item reveal">
+        <button class="acc-head">服务器是免费的吗？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">是的，云屿完全公益运营。赞助纯属自愿，且仅包含称号、粒子等外观道具，绝不影响游戏平衡。</div></div>
+      </div>
+      <div class="acc-item reveal">
+        <button class="acc-head">需要正版 Minecraft 吗？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">不需要。服务器开启离线模式，正版、离线、基岩版玩家均可进入。</div></div>
+      </div>
+      <div class="acc-item reveal">
+        <button class="acc-head">Java 版和基岩版如何互通？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">通过 Geyser 桥接实现双端同服。基岩版玩家直接输入服务器地址和端口即可加入，无需额外操作。</div></div>
+      </div>
+      <div class="acc-item reveal">
+        <button class="acc-head">怎么获得白名单？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">按入服指南三步完成即可：① 登录服注册绑定 → ② 网页答题考核 → ③ 加入玩家交流群。</div></div>
+      </div>
+      <div class="acc-item reveal">
+        <button class="acc-head">服务器会删档吗？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">主世界原则上永久保留，不删档。任何大型版本更新都会提前在群内公告，并做好备份迁移。</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 赞助支持（价格卡片） ===== -->
+  <section class="section" id="support">
+    <div class="section-head reveal">
+      <span class="eyebrow">SUPPORT US</span>
+      <h2>支持云屿，<span class="gradient-text">共同筑梦</span></h2>
+      <p>赞助完全自愿，仅含外观道具，服务器公平性不受任何影响。</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card card reveal">
+        <div class="price-tier">萌新赞助</div>
+        <div class="price">¥6<span>/ 月</span></div>
+        <ul class="price-list">
+          <li>✨ 专属称号 · 新星</li>
+          <li>📖 附魔书礼包（月度）</li>
+          <li>🚪 高峰时段优先排队</li>
+        </ul>
+        <button class="btn btn-ghost price-btn" data-href="support">选择支持</button>
+      </div>
+      <div class="price-card card featured reveal">
+        <span class="featured-badge">最受欢迎</span>
+        <div class="price-tier">资深赞助</div>
+        <div class="price">¥30<span>/ 月</span></div>
+        <ul class="price-list">
+          <li>🌟 专属称号 · 星轨</li>
+          <li>🎁 每月物资箱 + 命名牌</li>
+          <li>🕊️ 领地内飞行权限</li>
+          <li>🎧 客服优先响应</li>
+        </ul>
+        <button class="btn btn-primary price-btn" data-href="support">选择支持</button>
+      </div>
+      <div class="price-card card reveal">
+        <div class="price-tier">殿堂赞助</div>
+        <div class="price">¥88<span>/ 月</span></div>
+        <ul class="price-list">
+          <li>👑 定制称号 + 粒子特效</li>
+          <li>💎 每月限定时装</li>
+          <li>🚀 专属传送点</li>
+          <li>🏛️ 赞助者专属 NPC 纪念</li>
+        </ul>
+        <button class="btn btn-ghost price-btn" data-href="support">选择支持</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 页脚 ===== -->
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a class="brand" href="#hero"><span class="brand-mark">⬢</span> 云屿 <em>CloudIsle</em></a>
+        <p>穿云破雾，方寸筑梦。<br>一个由社区共同守护的纯净世界。</p>
+      </div>
+      <div class="footer-col">
+        <h4>导航</h4>
+        <a href="#features">服务器特色</a>
+        <a href="#guide">入服指南</a>
+        <a href="#map">路网地图</a>
+        <a href="#rules">社区公约</a>
+      </div>
+      <div class="footer-col">
+        <h4>社区</h4>
+        <a href="#" data-href="qq">入服门户群</a>
+        <a href="#" data-href="quiz">白名单答题</a>
+        <a href="#" data-href="docs">教程文档</a>
+        <a href="#" data-href="feedback">反馈工单</a>
+      </div>
+      <div class="footer-col">
+        <h4>支持</h4>
+        <a href="#support">赞助支持</a>
+        <a href="#faq">常见问题</a>
+        <a href="#" data-href="map">实时地图</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2025</span> 云屿 CloudIsle · 保留所有权利</span>
+      <span class="footer-note">本站为 GitHub Pages 静态模板 · 请替换为你服务器的真实信息</span>
+    </div>
+  </footer>
+
+  <!-- 轻提示 -->
+  <div class="toast" id="toast">✅ 已复制服务器地址</div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
