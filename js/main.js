@@ -117,31 +117,39 @@ $('#heroCopyIp').addEventListener('click', e=>copyIp(e.currentTarget));
 $('#guideCopyIp').addEventListener('click', e=>copyIp(e.currentTarget,'📋 worldeternal.xyz'));
 $('#sidebarCopyIp').addEventListener('click', e=>copyIp(e.currentTarget,'📋 复制地址'));
 
-/* ---------- 实时状态 ---------- */
-const els={
-  st:$('#statusText'), sd:$('#statusDot'), sp:$('#statusPing'), spl:$('#statusPlayers'), stps:$('#statusTps'),
+/* ---------- 实时状态：Plan graph 端点（当前实时玩家数 + TPS） ---------- */
+const els = {
+  st:$('#statusText'), sd:$('#statusDot'), sp:$('#statusPing'),
+  spl:$('#statusPlayers'), stps:$('#statusTps'),
   hp:$('#heroPlayers'), ht:$('#heroTps'), hst:$('#heroStatusText'),
 };
+
 function apply(s){
   const on=s.online!==false;
   els.sd.className='dot '+(on?'dot-green pulse':'dot-gray');
-  els.st.textContent=on?'在线':'维护中'; els.hst.textContent=on?'在线':'维护中';
+  els.st.textContent=on?'在线':'维护中';
+  els.hst.textContent=on?'在线':'维护中';
   if(s.players){ els.spl.textContent=s.players.online??'--'; els.hp.textContent=s.players.online??'--'; }
   if(s.tps!=null){ const t=Number(s.tps); els.stps.textContent=isFinite(t)?t.toFixed(1):'--'; els.ht.textContent=isFinite(t)?t.toFixed(1):'--'; }
   if(s.delay!=null) els.sp.textContent=Math.round(Number(s.delay));
 }
-async function fj(u){ const r=await fetch(u,{mode:'cors'}); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }
-function refresh(){
-  const m={};
-  const t=[];
-  if(CONFIG.statusApi) t.push(fj(CONFIG.statusApi).then(d=>{ m.online=(d.online??true)!==false; m.players=d.players; m.tps=d.tps; }).catch(()=>{}));
-  if(CONFIG.statusPingApi) t.push(fj(CONFIG.statusPingApi).then(d=>{ if(m.online===undefined) m.online=d.online!==false; m.players=m.players||d.players; if(m.delay===undefined) m.delay=d.delay; }).catch(()=>{}));
-  if(!t.length){ sim(); return; }
-  Promise.allSettled(t).then(()=>{ if(!Object.keys(m).length){ sim(); return; } apply(m); });
-}
-function sim(){ apply({online:true,players:{online:Math.floor(3+Math.random()*15)},tps:19.7+Math.random()*.3,delay:8+Math.random()*18}); }
-refresh(); setInterval(refresh, CONFIG.refreshInterval);
 
+function refreshStatus(){
+  const url=CONFIG.planBase+'/v1/graph?type=optimizedPerformance&server='+CONFIG.planServerId;
+  fetch(url,{mode:'cors'})
+    .then(r=>r.json())
+    .then(d=>{
+      const vals=d.values;
+      if(!vals||!vals.length) throw new Error('no data');
+      const last=vals[vals.length-1];       // 最近一条 = 实时值
+      apply({
+        online:true,
+        players:{online:last[1]||0, max:CONFIG.maxPlayers},   // playersOnline
+        tps:last[2],                                          // tps
+      });
+    })
+    .catch(()=>apply({online:false}));
+}
 /* ---------- 3D 倾斜（仅桌面 hover 设备） ---------- */
 if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
   $$('.tilt').forEach(card=>{
