@@ -117,7 +117,7 @@ $('#heroCopyIp').addEventListener('click', e=>copyIp(e.currentTarget));
 $('#guideCopyIp').addEventListener('click', e=>copyIp(e.currentTarget,'📋 worldeternal.xyz'));
 $('#sidebarCopyIp').addEventListener('click', e=>copyIp(e.currentTarget,'📋 复制地址'));
 
-/* ---------- 实时状态：Plan graph 端点（当前实时玩家数 + TPS） ---------- */
+/* ---------- 实时状态（Plan，带页面级错误反馈） ---------- */
 const els = {
   st:$('#statusText'), sd:$('#statusDot'), sp:$('#statusPing'),
   spl:$('#statusPlayers'), stps:$('#statusTps'),
@@ -132,35 +132,26 @@ function apply(s){
   if(s.players){ els.spl.textContent=s.players.online??'--'; els.hp.textContent=s.players.online??'--'; }
   if(s.tps!=null){ const t=Number(s.tps); els.stps.textContent=isFinite(t)?t.toFixed(1):'--'; els.ht.textContent=isFinite(t)?t.toFixed(1):'--'; }
   if(s.delay!=null) els.sp.textContent=Math.round(Number(s.delay));
+  /* 调试：把最终结果写到状态区下方 */
+  const note=document.querySelector('.status-note');
+  if(note) note.textContent='[调试] players='+(s.players?JSON.stringify(s.players):'无')+' tps='+s.tps+' delay='+s.delay;
 }
 
 function refreshStatus(){
-  const g = CONFIG.planBase+'/v1/graph?type=optimizedPerformance&server='+CONFIG.planServerId;
-  const p = CONFIG.planBase+'/v1/playersTable?server='+CONFIG.planServerId;
-
-  Promise.all([
-    fetch(g,{mode:'cors'}).then(r=>r.json()).catch(()=>null),
-    fetch(p,{mode:'cors'}).then(r=>r.json()).catch(()=>null),
-  ]).then(([gData,pData])=>{
-    const merged = { online: true };
-
-    // ① 玩家数 + TPS：优先 graph 最后一条（Plan 官方实时值）
-    if(gData && Array.isArray(gData.values) && gData.values.length){
-      const last = gData.values[gData.values.length-1];
-      merged.players = { online: Number(last[1])||0, max: CONFIG.maxPlayers };
-      merged.tps     = Number(last[2]);
-    }
-    // ② 兜底：graph 没数据时，用 playersTable 算在线数
-    else if(pData && Array.isArray(pData.players)){
-      const now = Date.now();
-      const on  = pData.players.filter(x => now - x.lastSeen < 2*60*1000).length;
-      merged.players = { online: on, max: CONFIG.maxPlayers };
-    }
-
-    console.log('[status] graph-data:', gData ? 'OK('+gData.values.length+'条)' : 'null',
-                '| players:', merged.players, '| tps:', merged.tps);
-    apply(merged);
-  }).catch(()=>apply({online:false}));
+  const url=CONFIG.planBase+'/v1/graph?type=optimizedPerformance&server='+CONFIG.planServerId;
+  fetch(url,{mode:'cors'})
+    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(d=>{
+      if(!d || !Array.isArray(d.values) || !d.values.length) throw new Error('values 为空');
+      const last=d.values[d.values.length-1];
+      apply({ online:true, players:{online:last[1]||0, max:CONFIG.maxPlayers}, tps:last[2] });
+    })
+    .catch(err=>{
+      /* 出错时把原因直接显示在页面 */
+      apply({online:false});
+      const note=document.querySelector('.status-note');
+      if(note) note.textContent='[错误] '+err.message;
+    });
 }
 /* ---------- 3D 倾斜（仅桌面 hover 设备） ---------- */
 if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
