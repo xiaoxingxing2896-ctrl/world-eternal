@@ -1,116 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>交通网络与公共设施 · 一辈子存档 WorldEternal</title>
-  <meta name="description" content="一辈子存档 WorldEternal —— 全景交互式交通路网，主世界与地狱全维度路网，支持导入路网文件与添加路径点。">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-
-  <div class="scroll-progress" id="scrollProgress"></div>
-  <div class="bg-grid"></div>
-  <div class="glow glow-1"></div>
-  <div class="glow glow-2"></div>
-  <div class="glow glow-3"></div>
-
-  <!-- ===== 导航栏 ===== -->
-  <header class="navbar" id="navbar">
-    <a class="brand" href="index.html">
-      <span class="brand-mark">⬢</span>
-      <span class="brand-name">一辈子存档 <em>worldeternal</em></span>
-    </a>
-    <nav class="nav-links" id="navLinks">
-      <a href="index.html#hero">首页</a>
-      <a href="index.html#features">特色</a>
-      <a href="index.html#status">状态</a>
-      <a href="index.html#guide">入服指南</a>
-      <a href="facilities.html" class="active">交通设施</a>
-      <a href="index.html#livemap">实时卫星地图</a>
-      <a href="index.html#rules">规则</a>
-    </nav>
-    <div class="nav-actions">
-      <a href="index.html#guide" class="btn btn-primary nav-cta">立即加入</a>
-      <button class="hamburger" id="hamburger" aria-label="打开菜单">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </header>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <nav>
-      <a href="index.html#hero">首页</a>
-      <a href="index.html#features">特色</a>
-      <a href="index.html#status">服务器状态</a>
-      <a href="index.html#guide">入服指南</a>
-      <a href="facilities.html">交通设施</a>
-      <a href="index.html#livemap">实时卫星地图</a>
-      <a href="index.html#rules">规则</a>
-    </nav>
-    <a href="index.html#guide" class="btn btn-primary mobile-cta">立即加入</a>
-  </div>
-
-  <!-- ===== 页头 ===== -->
-  <section class="facilities-hero">
-    <div class="hero-inner">
-      <span class="hero-badge">交通网络 · 公共设施 · 地标</span>
-      <h1>全景交互式<span class="gradient-text">路网</span></h1>
-      <p class="hero-sub">查阅主世界与地狱的全维度路网与公共设施。全线已贯通，即刻体验互联便利。</p>
-    </div>
-  </section>
-
-  <!-- ===== 操作工具条 ===== -->
-  <section class="toolbar">
-    <div class="toolbar-inner">
-      <div class="toolbar-left">
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 搜索站点 / 设施 / 负责人 / 产出…">
-        <div class="tabs" id="worldTabs">
-          <button class="tab active" data-world="全部">全部</button>
-          <button class="tab" data-world="主世界">🌍 主世界</button>
-          <button class="tab" data-world="地狱">🔥 地狱</button>
-        </div>
+        <button class="modal-close" id="modalClose">✕</button>
       </div>
-      <div class="toolbar-right">
-        <button class="btn btn-ghost btn-sm" id="importBtn">📥 导入路网文件</button>
-        <button class="btn btn-ghost btn-sm" id="sampleBtn">📄 下载示例文件</button>
-        <button class="btn btn-ghost btn-sm" id="exportBtn">📤 导出路网</button>
-        <button class="btn btn-primary btn-sm" id="addBtn">＋ 添加路径点</button>
-        <input type="file" id="importFile" accept=".json" hidden>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 主内容：SVG 路网 + 设施列表 ===== -->
-  <main class="facilities-main">
-
-    <!-- 交互式路网 -->
-    <section class="map-panel card">
-      <div class="map-toolbar">
-        <span class="map-hint">👆 点击站点查看详情并定位到下方设施卡片</span>
-        <span class="map-count" id="mapCount">0 个站点 · 0 条线路</span>
-      </div>
-      <div class="map-stage">
-        <svg id="mapSvg" viewBox="0 0 800 470" role="img" aria-label="服务器交通路网"></svg>
-      </div>
-    </section>
-
-    <!-- 设施数据库列表（云中城 facilities 同构） -->
-    <section class="facility-list" id="facilityList"></section>
-
-  </main>
-
-  <!-- ===== 空状态 ===== -->
-  <div class="list-empty" id="listEmpty" hidden>
-    <p>😶 没有符合条件的站点</p>
-  </div>
-
-  <!-- ===== 添加路径点弹窗 ===== -->
-          <div class="form-row">
-          <label>名称 <span class="req">*</span><input name="name" required placeholder="如：刷石机"></label>
+      <form id="addForm" class="modal-form">
+        <div class="form-row">
+          <label>设施名称 <span class="req">*</span><input name="name" required placeholder="如：刷石机"></label>
           <label>图标 (emoji) <input name="icon" placeholder="⚙️"></label>
         </div>
         <div class="form-row">
@@ -121,28 +13,39 @@
               <option>末地</option>
             </select>
           </label>
-          <label>负责人 <input name="owner" placeholder="点击可复制 QQ"></label>
+          <label>分类
+            <select name="category">
+              <option value="机器">机器</option>
+              <option value="公共设施">公共设施</option>
+            </select>
+          </label>
         </div>
         <div class="form-row">
+          <label>负责人（QQ）<input name="owner" placeholder="玩家名，点击可复制 QQ"></label>
           <label>地图 X 坐标 <input name="x" type="number" min="0" max="800" placeholder="0-800"></label>
-          <label>地图 Y 坐标 <input name="y" type="number" min="0" max="470" placeholder="0-470"></label>
         </div>
-        <label>游戏内坐标 <input name="coords" placeholder="X: -856, Y: 69, Z: 478"></label>
-        <label>依赖站点 <input name="depend" placeholder="如：主城站"></label>
-        <label>描述 / 产出 / 提示
-          <textarea name="desc" rows="3" placeholder="设施功能、产出、使用提示……"></textarea>
+        <div class="form-row">
+          <label>地图 Y 坐标 <input name="y" type="number" min="0" max="470" placeholder="0-470"></label>
+          <label>游戏内坐标 <input name="coords" placeholder="X: -856, Y: 69, Z: 478"></label>
+        </div>
+        <label>产出（逗号分隔）
+          <input name="output" placeholder="圆石, 石头, 平滑石头">
+        </label>
+        <label>依赖站点 <input name="depend" placeholder="如：追风港"></label>
+        <label>提示 / 使用说明
+          <textarea name="tips" rows="3" placeholder="开机：务必先拉下拉杆，再按一下石质按钮……"></textarea>
         </label>
         <label>接驳方式
-          <textarea name="transport" rows="2" placeholder="如：主世界冰道主站，到达 XXX 站后出站步行至目的地"></textarea>
+          <textarea name="transport" rows="2" placeholder="如：地铁1号线/冰道，到达XXX站后出站，步行至目的地"></textarea>
         </label>
         <div class="form-row form-actions">
           <button type="button" class="btn btn-ghost" id="formCancel">取消</button>
-          <button type="submit" class="btn btn-primary">保存路径点</button>
+          <button type="submit" class="btn btn-primary">保存设施</button>
         </div>
       </form>
     </div>
   </div>
-  
+
   <!-- 轻提示 -->
   <div class="toast" id="toast"></div>
 
