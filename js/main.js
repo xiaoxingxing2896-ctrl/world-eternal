@@ -6,7 +6,8 @@ const CONFIG = {
   serverName:'一辈子存档 WorldEternal',
   serverIp:'worldeternal.xyz',
   maxPlayers:120,
-  qqGroup:'https://qm.qq.com/q/YOUR_GROUP_CODE',
+  qqGroup:'',               // ← 群主生成官方链接后填这里（如 'https://qm.qq.com/q/xxxx'）
+  qqNumber:'730743375',     // ← 群号（TenAPI 兜底用）
   feedbackUrl:'mailto:admin@worldeternal.xyz',
   mapUrl:'https://map.worldeternal.xyz',
   workerUrl:'https://status.worldeternal.xyz/status',
@@ -89,6 +90,21 @@ function fallbackCopy(ok){
   ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select();
   try{ document.execCommand('copy'); ok(); }catch(e){ toast('❌ 手动复制：'+CONFIG.serverIp); }
   ta.remove();
+}
+function openQQGroup(){
+  if(CONFIG.qqGroup){ location.href = CONFIG.qqGroup; return; }   // 优先官方链接
+  /* 兜底：TenAPI 用群号换加群链接 */
+  fetch('https://tenapi.cn/v2/group', {
+    method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:'qun='+CONFIG.qqNumber
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d && d.code===200 && d.data && d.data.url) location.href = d.data.url;
+    else toast('加群失败，请手动搜索群号：'+CONFIG.qqNumber);
+  })
+  .catch(()=>toast('加群失败，请手动搜索群号：'+CONFIG.qqNumber));
 }
 $('#heroCopyIp') && $('#heroCopyIp').addEventListener('click', e=>copyIp(e.currentTarget,'📋 复制地址'));
 $('#guideCopyIp') && $('#guideCopyIp').addEventListener('click', e=>copyIp(e.currentTarget,'📋 worldeternal.xyz'));
