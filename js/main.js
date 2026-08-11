@@ -7,7 +7,7 @@ const CONFIG = {
   maxPlayers:120,
   qqGroup:'https://qm.qq.com/q/YOUR_GROUP_CODE',
   feedbackUrl:'mailto:admin@worldeternal.xyz',
-  mapUrl:'',
+  mapUrl:'https://map.worldeternal.xyz',
   statusApi:'',
   statusPingApi:'',
   refreshInterval:10000,
