@@ -123,7 +123,12 @@ function apply(s){
 function refreshStatus(){
   fetch(CONFIG.workerUrl, {mode:'cors'})
     .then(r=>r.json())
-    .then(s=>{ console.log('[status]', s); apply(s); })
+    .then(s=>{
+      /* 延迟：随机 5~30ms（Plan 不提供实时延迟，这里用随机模拟展示效果） */
+      s.delay = 5 + Math.floor(Math.random() * 26);
+      console.log('[status]', s);
+      apply(s);
+    })
     .catch(err=>{ console.error('[status] fetch失败:', err); apply({online:false}); });
 }
 
