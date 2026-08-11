@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>一辈子存档 WorldEternal · 纯净生存 Minecraft 服务器</title>
+  <meta name="description" content="一辈子存档 WorldEternal —— 公益纯净生存 MC 服务器。无圈地、建筑生电友好、Java/基岩互通、离线可进。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="bg-grid"></div>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+
+  <!-- ===== 导航栏 ===== -->
+  <header class="navbar" id="navbar">
+    <a class="brand" href="#hero">
+      <span class="brand-mark">⬢</span>
+      <span class="brand-name">一辈子存档 <em>worldeternal</em></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#hero">首页</a>
+      <a href="#features">特色</a>
+      <a href="#status">状态</a>
+      <a href="#guide">入服指南</a>
+      <a href="facilities.html">交通设施</a>
+      <a href="#livemap">实时卫星地图</a>
+      <a href="#rules">规则</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#guide" class="btn btn-primary nav-cta">立即加入</a>
+      <button class="hamburger" id="hamburger" aria-label="打开菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="mobile-menu" id="mobileMenu">
+    <nav>
+      <a href="#hero">首页</a>
+      <a href="#features">特色</a>
+      <a href="#status">服务器状态</a>
+      <a href="#guide">入服指南</a>
+      <a href="facilities.html">交通设施</a>
+      <a href="#livemap">实时卫星地图</a>
+      <a href="#rules">规则</a>
+    </nav>
+    <a href="#guide" class="btn btn-primary mobile-cta">立即加入</a>
+  </div>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-aurora"></div>
+    <div class="block block-grass b1"></div>
+    <div class="block block-diamond b2"></div>
+    <div class="block block-stone b3"></div>
+    <div class="block block-tnt b4"></div>
+
+    <div class="hero-inner">
+      <span class="hero-badge reveal">公益 · 纯净生存 · 无圈地 · 建筑生电友好</span>
+      <h1 class="reveal">一朝入服，<span class="gradient-text">一辈子存档</span></h1>
+      <p class="hero-sub reveal">
+        一辈子存档 · WorldEternal 是一个以纯净生存为核心的公益 Minecraft 服务器。<br class="pc-only">
+        Java / 基岩互通、离线可进，回归最纯粹的方块乐趣。
+      </p>
+      <div class="hero-actions reveal">
+        <a href="#guide" class="btn btn-primary">🎮 加入服务器</a>
+        <button class="btn btn-ghost" id="heroCopyIp">📋 复制地址</button>
+      </div>
+      <div class="hero-live reveal" id="heroLive">
+        <span class="dot dot-green"></span>
+        <span id="heroStatusText">在线</span>
+        <span class="sep">·</span>
+        <span>玩家 <b id="heroPlayers">0</b></span>
+        <span class="sep">·</span>
+        <span>TPS <b id="heroTps">20.0</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 关键词跑马灯 ===== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>公益</span><i>✦</i><span>纯净生存</span><i>✦</i><span>无圈地</span><i>✦</i>
+      <span>建筑生电友好</span><i>✦</i><span>Java / 基岩互通</span><i>✦</i><span>离线可进</span><i>✦</i>
+      <span>一辈子存档</span><i>✦</i>
+      <span>公益</span><i>✦</i><span>纯净生存</span><i>✦</i><span>无圈地</span><i>✦</i>
+      <span>建筑生电友好</span><i>✦</i><span>Java / 基岩互通</span><i>✦</i><span>离线可进</span><i>✦</i>
+      <span>一辈子存档</span><i>✦</i>
+    </div>
+  </div>
+
+  <!-- ===== 数据统计 ===== -->
+  <section class="stats">
+    <div class="stat reveal"><div class="stat-num" data-count="2">0</div><div class="stat-label">年运营</div></div>
+    <div class="stat reveal"><div class="stat-num" data-count="19">0</div><div class="stat-label">注册玩家</div></div>
+  </section>
+
+  <!-- ===== 服务器特色 ===== -->
+  <section class="section" id="features">
+    <div class="section-head reveal">
+      <span class="eyebrow">WHY WORLDETERNAL</span>
+      <h2>为纯粹生存而设计的 <span class="gradient-text">每一处细节</span></h2>
+      <p>没有花哨的氪金系统，只有原汁原味的方块世界。</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card tilt reveal">
+        <div class="card-icon">🌲</div>
+        <h3>纯净生存</h3>
+        <p>无 RNG、无氪金、无强制任务。原版机制，难度适中，回归最初的生存体验。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">🏗️</div>
+        <h3>无圈地</h3>
+        <p>全图自由建造，杜绝占坑摆烂。文明建造、互相尊重，让世界真正属于每个人。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">⚙️</div>
+        <h3>建筑 · 生电友好</h3>
+        <p>高频红石、刷怪塔、TNT 复制全面开放（合规申报），建筑党与生电党都能放手施展。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">🔗</div>
+        <h3>Java / 基岩互通</h3>
+        <p>通过 Geyser 桥接双端同服。手机、电脑、主机玩家在同一片大陆共同冒险。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">🛡️</div>
+        <h3>离线可进</h3>
+        <p>无需正版即可畅玩，同时提供账号安全保护，防止盗号与被冒名。</p>
+      </div>
+      <div class="card tilt reveal">
+        <div class="card-icon">💬</div>
+        <h3>一对一玩家交流</h3>
+        <p>服主与管理员一对一沟通：新手答疑、存档求助、建筑申报、问题反馈，都能直接找到人。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 实时状态 ===== -->
+  <section class="section" id="status">
+    <div class="section-head reveal">
+      <span class="eyebrow">SERVER STATUS</span>
+      <h2>实时<span class="gradient-text">状态</span></h2>
+      <p>在线状态、在线延迟、玩家人数与 TPS 实时同步更新。</p>
+    </div>
+    <div class="status-solo card reveal">
+      <div class="status-head">
+        <span class="dot dot-green pulse" id="statusDot"></span>
+        <span class="status-label" id="statusText">在线</span>
+        <span class="status-live-tag">LIVE · 每 10 秒自动刷新</span>
+      </div>
+      <div class="metric-row">
+        <div class="metric">
+          <span class="metric-key">在线延迟</span>
+          <span class="metric-val" id="statusPing">--</span>
+          <span class="metric-unit">ms</span>
+        </div>
+        <div class="metric">
+          <span class="metric-key">在线玩家</span>
+          <span class="metric-val" id="statusPlayers">--</span>
+          <span class="metric-unit">人</span>
+        </div>
+        <div class="metric">
+          <span class="metric-key">TPS</span>
+          <span class="metric-val" id="statusTps">--</span>
+          <span class="metric-unit">/ 20</span>
+        </div>
+      </div>
+      <p class="status-note">服务器地址：<code>worldeternal.xyz</code>　数据由 ServerTap 插件 + mcstatus.io 实时提供</p>
+    </div>
+  </section>
+
+  <!-- ===== 入服指南（时间线） ===== -->
+  <section class="section" id="guide">
+    <div class="section-head reveal">
+      <span class="eyebrow">GETTING STARTED</span>
+      <h2>三步启程，<span class="gradient-text">开启一辈子的存档</span></h2>
+      <p>从入群到进服，全程轻松愉快。</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-num">01</div>
+        <div class="timeline-body">
+          <h3>加入玩家社区</h3>
+          <p>加入对应的玩家 QQ 群，与全体玩家同游，第一时间获取公告与活动信息。</p>
+          <a class="timeline-link" href="#" data-href="qq">加入玩家 QQ 群 →</a>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-num">02</div>
+        <div class="timeline-body">
+          <h3>白名单考核</h3>
+          <p>由服主亲自检验，确认你适合这个社区后，即可获得入服资格。</p>
+          <span class="timeline-tag">服主亲自检验</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-num">03</div>
+        <div class="timeline-body">
+          <h3>加入服务器</h3>
+          <p>加入服务器，尽情享受属于你的方块世界，开启这一辈子的存档。</p>
+          <button class="btn btn-primary btn-sm" id="guideCopyIp">📋 worldeternal.xyz</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 实时卫星地图 ===== -->
+  <section class="section" id="livemap">
+    <div class="section-head reveal">
+      <span class="eyebrow">SATELLITE VIEW</span>
+      <h2>实时卫星地图</h2>
+      <p>上帝视角，实时俯瞰广袤的世界地貌与玩家足迹。</p>
+    </div>
+    <div class="card map-frame reveal" id="mapFrame">
+      <div class="map-frame-placeholder" id="mapPlaceholder">
+        <div class="radar"></div>
+        <h3>在线地图已就绪</h3>
+        <p>请在 <code>js/main.js</code> 的 <code>CONFIG.mapUrl</code> 填入 Dynmap / BlueMap 地址后自动嵌入。</p>
+        <a class="btn btn-primary" href="#" data-href="map" id="openMapBtn">打开实时地图 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 服务器规则 ===== -->
+  <section class="section" id="rules">
+    <div class="section-head reveal">
+      <span class="eyebrow">COMMUNITY RULES</span>
+      <h2>简明 <span class="gradient-text">社区公约</span></h2>
+      <p>自由之上，是相互尊重。寥寥数条，人人遵守。</p>
+    </div>
+    <div class="rules-grid">
+      <div class="rule-card reveal"><span class="rule-num">01</span><p>尊重他人，禁止恶意破坏、偷窃与欺骗。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">02</span><p>禁止使用外挂与恶意作弊，共同守护公平环境。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">03</span><p>无圈地制下请文明建造，请勿长期占用大面积空地。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">04</span><p>高频红石与 TNT 复制请先申报，做好防卡顿设计。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">05</span><p>公共频道禁止刷屏、引战与人身攻击。</p></div>
+      <div class="rule-card reveal"><span class="rule-num">06</span><p>服从管理协调，纠纷可通过一对一沟通申诉复核。</p></div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section section-narrow" id="faq">
+    <div class="section-head reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2>常见 <span class="gradient-text">问题</span></h2>
+    </div>
+    <div class="accordion" id="faqList">
+      <div class="acc-item reveal">
+        <button class="acc-head">服务器是免费的吗？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">是的，一辈子存档完全公益运营，服务器由社区共同维护，不设任何付费门槛。</div></div>
+      </div>
+      <div class="acc-item reveal">
+        <button class="acc-head">需要正版 Minecraft 吗？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">不需要。服务器开启离线模式，正版、离线、基岩版玩家均可进入。</div></div>
+      </div>
+      <div class="acc-item reveal">
+        <button class="acc-head">怎么加入玩家 QQ 群？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">点击入服指南第一步的「加入玩家 QQ 群」链接，或页脚「社区」中的入口即可。</div></div>
+      </div>
+      <div class="acc-item reveal">
+        <button class="acc-head">怎么获得白名单？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">按入服指南三步完成即可：① 加入玩家 QQ 群 → ② 由服主亲自检验 → ③ 加入服务器尽情享受。</div></div>
+      </div>
+      <div class="acc-item reveal">
+        <button class="acc-head">服务器会删档吗？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">不会。正如服务器名所言，这是「一辈子存档」，主世界永久保留、不删档，任何版本更新都会提前在群内公告并做好备份迁移。</div></div>
+      </div>
+      <div class="acc-item reveal">
+        <button class="acc-head">怎么查看交通路网？<span class="acc-arrow">+</span></button>
+        <div class="acc-body"><div class="acc-body-inner">进入顶部导航「交通设施」页面，可查看全景交互式路网与各站点设施详情，支持搜索、筛选、导入与添加路径点。</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 页脚 ===== -->
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a class="brand" href="#hero"><span class="brand-mark">⬢</span> 一辈子存档 <em>worldeternal</em></a>
+        <p>一朝入服，一辈子存档。<br>一个由社区共同守护的纯净世界。</p>
+      </div>
+      <div class="footer-col">
+        <h4>导航</h4>
+        <a href="#features">服务器特色</a>
+        <a href="#status">实时状态</a>
+        <a href="#guide">入服指南</a>
+        <a href="#rules">社区公约</a>
+      </div>
+      <div class="footer-col">
+        <h4>探索世界</h4>
+        <a href="facilities.html">交通设施 · 路网</a>
+        <a href="#livemap">实时卫星地图</a>
+        <a href="#faq">常见问题</a>
+      </div>
+      <div class="footer-col">
+        <h4>社区</h4>
+        <a href="#" data-href="qq">玩家 QQ 群</a>
+        <a href="#" data-href="feedback">反馈工单</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2025</span> 一辈子存档 WorldEternal · 保留所有权利</span>
+      <span class="footer-note">本站为 GitHub Pages / Cloudflare Pages 静态模板</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">✅ 已复制服务器地址</div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
