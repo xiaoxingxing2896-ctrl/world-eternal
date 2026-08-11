@@ -1,52 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>交通网络、公共设施与地标 · 一辈子存档 WorldEternal</title>
+  <meta name="description" content="一辈子存档 WorldEternal · 路网规划。查阅主世界与地狱全维度路网与设施数据库。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="bg-grid"></div>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+
+  <button class="menu-btn" id="menuBtn" aria-label="打开导航菜单">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- ===== 侧边抽屉导航 ===== -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">⬢</span>
+        <span class="brand-text">一辈子存档<span class="brand-sub">worldeternal</span></span>
+      </a>
+      <button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">✕</button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">页面导航</span>
+      <a href="index.html#hero">首页</a>
+      <a href="index.html#features">服务器特色</a>
+      <a href="index.html#status">实时状态</a>
+      <a href="index.html#guide">入服指南</a>
+      <a href="index.html#livemap">实时卫星地图</a>
+      <a href="index.html#rules">社区公约</a>
+      <a href="index.html#faq">常见问题</a>
+    </nav>
+
+    <div class="sidebar-separator"></div>
+
+    <div class="sidebar-special">
+      <span class="nav-section-label special-label">世界探索</span>
+      <a class="route-card active" href="facilities.html">
+        <span class="route-icon">🗺️</span>
+        <span class="route-info">
+          <strong>路网规划</strong>
+          <small>交通网络 · 公共设施 · 地标</small>
+        </span>
+        <span class="route-arrow">→</span>
+      </a>
+    </div>
+
+    <div class="sidebar-foot">
+      <a href="index.html#guide" class="btn btn-primary">立即加入</a>
+      <button class="btn btn-ghost btn-sm" id="sidebarCopyIp">📋 worldeternal.xyz</button>
+    </div>
+  </aside>
+
+  <!-- ===== 页头 ===== -->
+  <section class="facilities-hero">
+    <div class="hero-inner">
+      <span class="hero-badge">TRANSPORTATION · FACILITIES · LANDMARKS</span>
+      <h1>交通网络、<span class="gradient-text">公共设施与地标</span></h1>
+      <p class="hero-sub">查阅主世界与地狱的全维度路网。全线已贯通，即刻体验互联便利。</p>
+      <div class="hero-actions">
+        <a href="#topology" class="btn btn-primary" data-scroll>🗺️ 全景交互式路网</a>
+        <button class="btn btn-ghost" id="addBtn">＋ 登记设施</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 操作工具条 ===== -->
+  <section class="toolbar">
+    <div class="toolbar-inner">
+      <div class="toolbar-left">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 搜索设施 / 负责人 / 产出 / 站点…">
+        <div class="tabs" id="worldTabs">
+          <button class="tab active" data-world="全部">全部</button>
+          <button class="tab" data-world="主世界">🌍 主世界</button>
+          <button class="tab" data-world="地狱">🔥 地狱</button>
+          <button class="tab" data-world="末地">🌀 末地</button>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-ghost btn-sm" id="importBtn">📥 导入 JSON</button>
+        <button class="btn btn-ghost btn-sm" id="sampleBtn">📄 示例</button>
+        <button class="btn btn-ghost btn-sm" id="exportBtn">📤 导出</button>
+        <input type="file" id="importFile" accept=".json" hidden>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 主内容 ===== -->
+  <main class="facilities-main" id="topology">
+
+    <section class="map-panel card">
+      <div class="map-toolbar">
+        <div>
+          <span class="eyebrow">INTERACTIVE TOPOLOGY & FACILITIES</span>
+          <h2 class="map-title">全景交互式路网</h2>
+        </div>
+        <span class="map-count" id="mapCount">0 个设施 · 0 条线路</span>
+      </div>
+      <div class="map-stage">
+        <svg id="mapSvg" viewBox="0 0 800 470" role="img" aria-label="服务器交通路网"></svg>
+      </div>
+      <p class="map-tip">👆 点击 SVG 站点定位到下方设施卡片 · 点击卡片反向高亮站点</p>
+    </section>
+
+    <div class="list-head">
+      <h2>公共设施与机器</h2>
+      <span class="list-count" id="listCount">共 0 条</span>
+    </div>
+    <section class="facility-list" id="facilityList"></section>
+
+    <div class="list-empty" id="listEmpty" hidden><p>😶 没有符合条件的设施</p></div>
+
+  </main>
+
+  <!-- ===== 登记设施弹窗 ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>登记设施 / 路径点</h3>
         <button class="modal-close" id="modalClose">✕</button>
       </div>
       <form id="addForm" class="modal-form">
         <div class="form-row">
           <label>设施名称 <span class="req">*</span><input name="name" required placeholder="如：刷石机"></label>
-          <label>图标 (emoji) <input name="icon" placeholder="⚙️"></label>
+          <label>图标 emoji<input name="icon" placeholder="⚙️" maxlength="4"></label>
         </div>
         <div class="form-row">
-          <label>所属世界
-            <select name="world">
-              <option>主世界</option>
-              <option>地狱</option>
-              <option>末地</option>
-            </select>
-          </label>
-          <label>分类
-            <select name="category">
-              <option value="机器">机器</option>
-              <option value="公共设施">公共设施</option>
-            </select>
-          </label>
+          <label>世界<select name="world"><option>主世界</option><option>地狱</option><option>末地</option></select></label>
+          <label>分类<select name="category"><option value="机器">机器</option><option value="公共设施">公共设施</option><option value="地标">地标</option></select></label>
         </div>
         <div class="form-row">
-          <label>负责人（QQ）<input name="owner" placeholder="玩家名，点击可复制 QQ"></label>
-          <label>地图 X 坐标 <input name="x" type="number" min="0" max="800" placeholder="0-800"></label>
+          <label>负责人 QQ<input name="owner" placeholder="点击可复制 QQ"></label>
+          <label>SVG X (0~800)<input name="x" type="number" min="0" max="800" placeholder="400"></label>
         </div>
         <div class="form-row">
-          <label>地图 Y 坐标 <input name="y" type="number" min="0" max="470" placeholder="0-470"></label>
-          <label>游戏内坐标 <input name="coords" placeholder="X: -856, Y: 69, Z: 478"></label>
+          <label>SVG Y (0~470)<input name="y" type="number" min="0" max="470" placeholder="235"></label>
+          <label>游戏坐标<input name="coords" placeholder="X: -856, Y: 69, Z: 478"></label>
         </div>
-        <label>产出（逗号分隔）
-          <input name="output" placeholder="圆石, 石头, 平滑石头">
-        </label>
-        <label>依赖站点 <input name="depend" placeholder="如：追风港"></label>
-        <label>提示 / 使用说明
-          <textarea name="tips" rows="3" placeholder="开机：务必先拉下拉杆，再按一下石质按钮……"></textarea>
-        </label>
-        <label>接驳方式
-          <textarea name="transport" rows="2" placeholder="如：地铁1号线/冰道，到达XXX站后出站，步行至目的地"></textarea>
-        </label>
+        <label>产出（逗号分隔）<input name="output" placeholder="圆石, 平滑石头"></label>
+        <label>依赖站点<input name="depend" placeholder="如：追风港"></label>
+        <label>提示 / 说明<textarea name="tips" rows="3" placeholder="开机：务必先拉下拉杆……"></textarea></label>
+        <label>接驳方式<textarea name="transport" rows="2" placeholder="地铁1号线/冰道，到达XXX站后出站步行至目的地"></textarea></label>
         <div class="form-row form-actions">
           <button type="button" class="btn btn-ghost" id="formCancel">取消</button>
-          <button type="submit" class="btn btn-primary">保存设施</button>
+          <button type="submit" class="btn btn-primary" id="formSubmit">保存设施</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- 轻提示 -->
   <div class="toast" id="toast"></div>
 
   <script src="js/facilities.js"></script>
