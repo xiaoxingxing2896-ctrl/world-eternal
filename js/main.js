@@ -1,25 +1,24 @@
 /* =========================================================
-   云屿 CloudIsle · 交互逻辑
+   一辈子存档 WorldEternal · 交互逻辑
    顶部 CONFIG 为自定义配置区，部署时请替换为你的真实信息
    ========================================================= */
 
 const CONFIG = {
-  serverName: '云屿 CloudIsle',
-  serverIp: 'play.cloudisle.example',      // ← 替换为你的服务器地址
-  serverPort: 25565,                        // 基岩版端口（如启用 Geyser）
-  mcVersion: '1.20.x - 1.21.x',             // 支持的版本
-  maxPlayers: 120,                          // 最大玩家数
+  serverName: '一辈子存档 WorldEternal',
+  serverIp: 'worldeternal.xyz',               // 服务器地址
+  maxPlayers: 120,                            // 最大玩家数
   // ↓ 替换为你的真实链接
-  qqGroup: 'https://qm.qq.com/q/YOUR_GROUP_CODE',
-  quizUrl: 'https://quiz.your-server.com/quiz',
-  docsUrl: 'https://docs.qq.com/doc/YOUR_DOC_ID',
-  feedbackUrl: 'mailto:admin@your-server.com',
-  supportUrl: 'https://afdian.com/a/your-server',   // 赞助入口（爱发电等）
-  mapUrl: '',                               // 留空显示占位；填入 Dynmap/BlueMap 地址后自动嵌入
-  // 状态 API：留空 = 演示模式（模拟数据）；填写后自动请求
-  // 期望返回 JSON: { online:bool, players:{online:int,max:int}, tps:number, ms:number }
+  qqGroup: 'https://qm.qq.com/q/YOUR_GROUP_CODE',   // 玩家 QQ 群
+  feedbackUrl: 'mailto:admin@worldeternal.xyz',     // 反馈工单
+  mapUrl: '',                                 // Dynmap / BlueMap 地址，留空显示占位
+  // ↓ 实时状态数据源（两者可同时启用，自动合并）
+  // statusApi：ServerTap 插件接口（提供 在线/玩家数/TPS），示例：
+  //   'https://api.worldeternal.xyz/v1/server'
   statusApi: '',
-  refreshInterval: 10000,                   // 状态刷新间隔（毫秒）
+  // statusPingApi：mcstatus.io 接口（提供 在线/玩家数/延迟 delay），示例：
+  //   'https://api.mcstatus.io/v2/status/java/worldeternal.xyz'
+  statusPingApi: '',
+  refreshInterval: 10000,                     // 状态刷新间隔（毫秒）
 };
 
 /* ---------- 工具 ---------- */
@@ -34,16 +33,16 @@ function toast(msg){
   t._timer = setTimeout(()=>t.classList.remove('show'), 2200);
 }
 
-/* 外链统一处理（data-href 指向 CONFIG 键） */
+/* 外链统一处理 */
 function resolveHref(key){
   const map = {
-    qq: CONFIG.qqGroup, quiz: CONFIG.quizUrl, docs: CONFIG.docsUrl,
-    feedback: CONFIG.feedbackUrl, support: CONFIG.supportUrl, map: CONFIG.mapUrl || CONFIG.feedbackUrl,
+    qq: CONFIG.qqGroup, feedback: CONFIG.feedbackUrl,
+    map: CONFIG.mapUrl || CONFIG.feedbackUrl,
   };
   return map[key] || '#';
 }
 
-/* ---------- 导航栏滚动效果 + 滚动进度 + 激活链接 ---------- */
+/* ---------- 导航滚动 + 进度条 + 激活链接 ---------- */
 const navbar = $('#navbar');
 const progress = $('#scrollProgress');
 const sections = $$('section[id]');
@@ -79,7 +78,7 @@ document.addEventListener('click', e=>{
   if(mobileMenu.classList.contains('open') && !mobileMenu.contains(e.target) && !hamburger.contains(e.target)) closeMenu();
 });
 
-/* ---------- 按钮涟漪（点击反馈） ---------- */
+/* ---------- 按钮涟漪 ---------- */
 $$('.btn').forEach(btn=>{
   btn.addEventListener('click', e=>{
     const r = btn.getBoundingClientRect();
@@ -92,7 +91,7 @@ $$('.btn').forEach(btn=>{
   });
 });
 
-/* ---------- 滚动渐入（含错落延迟） ---------- */
+/* ---------- 滚动渐入 ---------- */
 const io = new IntersectionObserver(entries=>{
   entries.forEach(en=>{
     if(en.isIntersecting){
@@ -128,8 +127,8 @@ $$('.stat-num').forEach(el=>counterIO.observe(el));
 function copyIp(btn){
   const ok = ()=>{
     if(btn) btn.textContent = '✓ 已复制';
-    toast('✅ 服务器地址已复制到剪贴板');
-    setTimeout(()=>{ if(btn) btn.textContent = '📋 复制服务器地址'; }, 1800);
+    toast('✅ 服务器地址 worldeternal.xyz 已复制');
+    setTimeout(()=>{ if(btn) btn.textContent = '📋 worldeternal.xyz'; }, 1800);
   };
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(CONFIG.serverIp).then(ok).catch(()=>fallbackCopy(ok));
@@ -143,52 +142,88 @@ function fallbackCopy(ok){
   try{ document.execCommand('copy'); ok(); }catch(e){ toast('❌ 复制失败，请手动复制：' + CONFIG.serverIp); }
   ta.remove();
 }
-$('#copyIpBtn').addEventListener('click', e=>copyIp(e.currentTarget));
-$('#heroCopyIp').addEventListener('click', ()=>copyIp());
+$('#heroCopyIp').addEventListener('click', e=>copyIp(e.currentTarget));
+$('#guideCopyIp').addEventListener('click', e=>copyIp(e.currentTarget));
 
-/* ---------- 服务器状态（演示模式 / API 模式） ---------- */
+/* =========================================================
+   实时状态：合并 ServerTap（在线/玩家/TPS）
+   + mcstatus.io（在线/玩家/延迟），每 10 秒自动刷新
+   ========================================================= */
 const els = {
   statusText: $('#statusText'), statusDot: $('#statusDot'),
   statusPing: $('#statusPing'), statusPlayers: $('#statusPlayers'),
-  statusMax: $('#statusMax'), statusTps: $('#statusTps'),
-  heroPlayers: $('#heroPlayers'), heroMax: $('#heroMax'),
-  heroTps: $('#heroTps'), heroStatusText: $('#heroStatusText'),
+  statusTps: $('#statusTps'),
+  heroPlayers: $('#heroPlayers'), heroTps: $('#heroTps'),
+  heroStatusText: $('#heroStatusText'),
 };
-els.statusMax.textContent = CONFIG.maxPlayers;
-els.heroMax.textContent = CONFIG.maxPlayers;
 
-function applyStatus({online, players, tps, ms}){
-  const isOnline = online !== false;
+function applyStatus(state){
+  const isOnline = state.online !== false;
+  const cls = isOnline ? 'dot dot-green pulse' : 'dot dot-gray';
+  els.statusDot.className = cls;
   els.statusText.textContent = isOnline ? '在线' : '维护中';
-  els.statusDot.className = 'dot ' + (isOnline ? 'dot-green pulse' : 'dot-gray');
-  els.statusPing.textContent = isOnline ? ('~' + Math.round(ms) + 'ms') : '—';
   els.heroStatusText.textContent = isOnline ? '在线' : '维护中';
-  els.statusPlayers.textContent = players?.online ?? 0;
-  els.heroPlayers.textContent = players?.online ?? 0;
-  const tpsV = (tps ?? 20).toFixed(1);
-  els.statusTps.textContent = tpsV;
-  els.heroTps.textContent = tpsV;
+
+  if(state.players != null){
+    els.statusPlayers.textContent = state.players.online ?? '--';
+    els.heroPlayers.textContent = state.players.online ?? '--';
+  }
+  if(state.tps != null){
+    const t = Number(state.tps);
+    els.statusTps.textContent = isFinite(t) ? t.toFixed(1) : '--';
+    els.heroTps.textContent = isFinite(t) ? t.toFixed(1) : '--';
+  }
+  if(state.delay != null){
+    els.statusPing.textContent = Math.round(Number(state.delay));
+  }
+}
+
+async function fetchJson(url){
+  const r = await fetch(url, {mode:'cors'});
+  if(!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
 }
 
 function refreshStatus(){
-  if(CONFIG.statusApi){
-    fetch(CONFIG.statusApi, {mode:'cors'})
-      .then(r=>r.json())
-      .then(applyStatus)
-      .catch(()=>simulateStatus());
-  } else {
+  // 统一状态容器
+  const merged = {};
+
+  const tasks = [];
+  if(CONFIG.statusApi)      tasks.push(fetchJson(CONFIG.statusApi).then(d=>{
+    // ServerTap /v1/server: { tps, players:{online,max}, ... }
+    merged.online  = (d.online ?? true) !== false;
+    merged.players = d.players;
+    merged.tps     = d.tps;
+  }).catch(()=>{}));
+  if(CONFIG.statusPingApi)  tasks.push(fetchJson(CONFIG.statusPingApi).then(d=>{
+    // mcstatus.io: { online, players:{online,max}, delay, ... }
+    if(merged.online === undefined) merged.online = d.online !== false;
+    merged.players = merged.players || d.players;
+    if(merged.delay === undefined)  merged.delay = d.delay;
+  }).catch(()=>{}));
+
+  if(tasks.length === 0){
     simulateStatus();
+    return;
   }
-}
-function simulateStatus(){
-  const online = Math.floor(24 + Math.random() * 50);
-  applyStatus({
-    online: true,
-    players: {online, max: CONFIG.maxPlayers},
-    tps: 19.7 + Math.random() * 0.3,
-    ms: 8 + Math.random() * 18,
+  Promise.allSettled(tasks).then(()=>{
+    // 若所有请求都失败，回退演示数据
+    if(Object.keys(merged).length === 0){ simulateStatus(); return; }
+    applyStatus(merged);
   });
 }
+
+/* 演示模式：未配置任何数据源时使用（延迟/玩家/TPS 自动变化） */
+function simulateStatus(){
+  const online = Math.floor(3 + Math.random() * 15);
+  applyStatus({
+    online: true,
+    players: {online},
+    tps: 19.7 + Math.random() * 0.3,
+    delay: 8 + Math.random() * 18,
+  });
+}
+
 refreshStatus();
 setInterval(refreshStatus, CONFIG.refreshInterval);
 
@@ -233,7 +268,7 @@ $$('.acc-item').forEach(item=>{
 });
 
 /* =========================================================
-   交互式路网地图（数据驱动，可自行增删站点）
+   全景交互式路网（数据驱动，与云中城交通设施枢纽同构）
    ========================================================= */
 const NETWORKS = {
   overworld: {
@@ -279,7 +314,6 @@ function renderMap(netKey){
   const net = NETWORKS[netKey];
   svg.innerHTML = '';
 
-  // 站点名称标签（先画边再画点，点在上层）
   net.stations.forEach(s=>{
     const label = document.createElementNS(NS, 'text');
     label.setAttribute('x', s.x); label.setAttribute('y', s.y - 26);
@@ -288,7 +322,6 @@ function renderMap(netKey){
     svg.appendChild(label);
   });
 
-  // 线路
   net.edges.forEach(([a,b])=>{
     const A = net.stations.find(s=>s.id===a), B = net.stations.find(s=>s.id===b);
     const line = document.createElementNS(NS,'line');
@@ -299,7 +332,6 @@ function renderMap(netKey){
     svg.appendChild(line);
   });
 
-  // 站点
   net.stations.forEach(s=>{
     const g = document.createElementNS(NS,'g');
     g.setAttribute('class','map-station');
@@ -344,7 +376,6 @@ function selectStation(g, s, net){
     </div>`;
 }
 
-/* 切换 主世界 / 地狱 */
 $$('#mapTabs .tab').forEach(tab=>{
   tab.addEventListener('click', ()=>{
     $$('#mapTabs .tab').forEach(t=>t.classList.remove('active'));
@@ -355,7 +386,7 @@ $$('#mapTabs .tab').forEach(tab=>{
 });
 renderMap('overworld');
 
-/* ---------- 实时地图嵌入（配置了 mapUrl 后生效） ---------- */
+/* ---------- 实时卫星地图嵌入（配置 mapUrl 后生效） ---------- */
 function setupMapFrame(){
   const frame = $('#mapFrame');
   if(CONFIG.mapUrl){
