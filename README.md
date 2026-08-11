@@ -1,59 +1,61 @@
-# 云屿 CloudIsle · Minecraft 服务器宣传站
+# 一辈子存档 WorldEternal · 官网
 
-一个参照 **Cloudflare Connect** 视觉风格、以 **Cloudsdale（云中城）** 功能为蓝本的
-MC 服务器宣传 + 实用型静态网站，适配桌面端与移动端，可直接部署到 GitHub Pages。
+一个参照 **Cloudflare Connect** 视觉风格的 Minecraft 服务器宣传 + 实用型静态网站。
+导航采用**侧边抽屉灵动弹出**形式，「路网规划」以**反色高亮卡片**单独区分。
+纯静态，可部署到 GitHub Pages / Cloudflare Pages。
 
-## 快速部署（GitHub Pages）
+## 文件结构
 
-1. 新建 GitHub 仓库（如 `mc-server-site`），保持 **Public**。
-2. 将 `index.html`、`css/`、`js/` 三个文件上传到仓库根目录（可通过网页上传，或 git push）。
-3. 打开仓库 **Settings → Pages**：
-   - Source 选择 **Deploy from a branch**
-   - Branch 选择 `main`，目录 `/ (root)`
-   - 点击 **Save**
-4. 等待 1~2 分钟，访问 `https://你的用户名.github.io/mc-server-site/` 即可。
-5. （可选）在 **Settings → Pages** 中绑定自定义域名。
+```
+├── index.html          # 主页
+├── facilities.html     # 路网规划（交通设施）独立页
+├── css/style.css       # 全站样式
+├── js/main.js          # 主页逻辑
+├── js/facilities.js    # 路网页逻辑
+└── README.md
+```
 
-> 提示：纯静态站免费、无需服务器，适合宣传页 / 落地页。
-> 实时状态、在线地图等需要与你的 MC 服务器联动，见下方「自定义」。
+## 部署（Cloudflare Pages）
 
-## 自定义你的服务器信息
+1. 上传全部文件到仓库（根目录含 index.html）。
+2. Cloudflare 仪表盘 → Workers & Pages → 创建应用程序 → Pages →
+   - **上传资产**：直接拖拽 zip（zip 根目录须直接含 index.html）
+   - 或 **连接 Git**：构建命令留空、构建输出目录留空
+3. 得到 `https://项目名.pages.dev` 地址，可绑定自定义域名。
 
-所有需要修改的配置都集中在 `js/main.js` 顶部的 `CONFIG` 对象：
+## 自定义
 
-| 配置项 | 说明 |
+所有需要改的配置集中在各 JS 顶部 `CONFIG` / `DEFAULT_NETWORK`：
+
+| 文件 | 配置 | 说明 |
+|---|---|---|
+| `js/main.js` | `CONFIG.serverIp` | 服务器地址 |
+| | `CONFIG.qqGroup` | 玩家 QQ 群链接 |
+| | `CONFIG.feedbackUrl` | 反馈工单 |
+| | `CONFIG.mapUrl` | Dynmap/BlueMap 地址（留空显示占位） |
+| | `CONFIG.statusApi` | ServerTap 接口（TPS/玩家/在线） |
+| | `CONFIG.statusPingApi` | mcstatus.io 接口（在线/玩家/延迟） |
+| `js/facilities.js` | `DEFAULT_NETWORK` | 路网数据（站点/线路/设施字段） |
+
+### 路网数据字段（与云中城设施页一致）
+
+| 字段 | 说明 |
 |---|---|
-| `serverIp` | 服务器地址（复制按钮会复制它） |
-| `serverPort` | 基岩版端口 |
-| `mcVersion` | 支持的 MC 版本 |
-| `maxPlayers` | 最大玩家数 |
-| `qqGroup` | 入服门户群链接 |
-| `quizUrl` | 白名单答题系统地址 |
-| `docsUrl` | 入服教程文档地址 |
-| `feedbackUrl` | 反馈 / 工单入口 |
-| `supportUrl` | 赞助入口（爱发电 / 支付宝等） |
-| `mapUrl` | 实时地图地址（Dynmap / BlueMap），**留空显示占位图** |
-| `statusApi` | 服务器状态 API，**留空为演示模式（模拟数据）** |
+| `name` | 设施名称 |
+| `world` | 主世界 / 地狱 / 末地 |
+| `owner` | 负责人（列表可点击复制 QQ） |
+| `output` | 产出（数组） |
+| `category` | 机器 / 公共设施 / 地标 |
+| `coords` | 游戏内坐标 |
+| `depend` | 依赖站点 |
+| `transport` | 接驳方式 |
+| `tips` | 提示 / 使用说明 |
+| `x`,`y` | SVG 画布坐标（0~800 / 0~470） |
+| `edges` | 线路：`[["站Aid","站Bid"], ...]` |
 
-### 接入真实状态
+## 侧边导航说明
 
-- 使用 [mcstatus.io](https://mcstatus.io) 等第三方 API（需支持 CORS），把 JSON 地址填入 `statusApi`。
-- 或在你的服务器上部署一个小接口，返回格式：
-  ```json
-  { "online": true, "players": { "online": 42, "max": 120 }, "tps": 20.0, "ms": 12 }
-  ```
-
-### 修改路网地图
-
-站点与线路数据在 `js/main.js` 的 `NETWORKS` 对象中，按 `{x, y, name, icon, desc}` 增删站点、
-按 `['站点A','站点B']` 增删连线即可，坐标范围建议在 0~800（横向）、0~470（纵向）内。
-
-### 修改配色
-
-所有颜色集中在 `css/style.css` 顶部 `:root` 变量中，改 `--accent`（橙色强调色）即可全局换肤。
-
-## 移动端适配
-
-- ≤768px：导航折叠为抽屉菜单、卡片单列堆叠、时间线紧凑化、价格卡片竖排。
-- 桌面端：3 列网格、导航常驻、卡片 3D 倾斜悬停。
-- 所有动画（涟漪、滚动渐入、数字滚动、地图高亮）均对触屏友好。
+- 左上角菜单按钮弹出/收起侧边抽屉（平滑 cubic-bezier 动画）。
+- 普通页面导航与「路网规划」之间以渐变分隔线隔开。
+- 「路网规划」卡片使用**与全站相反的亮色主题**高亮突出。
+- 支持 Esc / 点击遮罩 / 点击链接关闭。
