@@ -135,21 +135,32 @@ function apply(s){
 }
 
 function refreshStatus(){
-  const url=CONFIG.planBase+'/v1/graph?type=optimizedPerformance&server='+CONFIG.planServerId;
-  fetch(url,{mode:'cors'})
-    .then(r=>r.json())
-    .then(d=>{
-      const vals=d.values;
-      if(!vals||!vals.length) throw new Error('no data');
-      const last=vals[vals.length-1];       // 最近一条 = 实时值
-      apply({
-        online:true,
-        players:{online:last[1]||0, max:CONFIG.maxPlayers},   // playersOnline
-        tps:last[2],      // tps
-        cpu:last[3],      //cpu
-      });
-    })
-    .catch(()=>apply({online:false}));
+  const g = CONFIG.planBase+'/v1/graph?type=optimizedPerformance&server='+CONFIG.planServerId;
+  const p = CONFIG.planBase+'/v1/playersTable?server='+CONFIG.planServerId;
+
+  Promise.all([
+    fetch(g,{mode:'cors'}).then(r=>r.json()).catch(()=>null),
+    fetch(p,{mode:'cors'}).then(r=>r.json()).catch(()=>null),
+  ]).then(([gData,pData])=>{
+    const merged = { online: true };
+
+    // ① 玩家数 + TPS：优先 graph 最后一条（Plan 官方实时值）
+    if(gData && Array.isArray(gData.values) && gData.values.length){
+      const last = gData.values[gData.values.length-1];
+      merged.players = { online: Number(last[1])||0, max: CONFIG.maxPlayers };
+      merged.tps     = Number(last[2]);
+    }
+    // ② 兜底：graph 没数据时，用 playersTable 算在线数
+    else if(pData && Array.isArray(pData.players)){
+      const now = Date.now();
+      const on  = pData.players.filter(x => now - x.lastSeen < 2*60*1000).length;
+      merged.players = { online: on, max: CONFIG.maxPlayers };
+    }
+
+    console.log('[status] graph-data:', gData ? 'OK('+gData.values.length+'条)' : 'null',
+                '| players:', merged.players, '| tps:', merged.tps);
+    apply(merged);
+  }).catch(()=>apply({online:false}));
 }
 /* ---------- 3D 倾斜（仅桌面 hover 设备） ---------- */
 if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
