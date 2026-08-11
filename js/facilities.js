@@ -7,27 +7,100 @@
 
 const STORAGE_KEY = 'worldeternal_network_v1';
 
-/* ---------- 默认路网数据（与云中城 facilities 同构字段） ---------- */
+/* =========================================================
+   ★ 默认路网数据（已整合：一辈子存档 · 主世界交通路网）
+   想改默认数据直接编辑下面的 stations / edges 即可
+   ========================================================= */
 const DEFAULT_NETWORK = {
-  meta: { name: '一辈子存档交通路网', version: 1 },
+  meta: { name: '一辈子存档 · 主世界交通路网', version: 2 },
   stations: [
-    { id:'central',  name:'主城站',   world:'主世界', x:400, y:235, icon:'🏰', owner:'',            coords:'X: 0, Y: 70, Z: 0',  depend:'—', transport:'全服交通枢纽，连接各主要站点。',                      desc:'全服交通枢纽，包含末地传送门与主城传送，所有线路以此为中心辐射。' },
-    { id:'spawn',    name:'出生点',   world:'主世界', x:400, y:62,  icon:'🌱', owner:'',            coords:'X: 0, Y: 64, Z: 0',  depend:'主城站', transport:'出生即达，出站即主城。',                        desc:'新手出发地，设有新手礼包领取处与引导告示牌。' },
-    { id:'market',   name:'商业街',   world:'主世界', x:645, y:150, icon:'🏪', owner:'全体玩家',    coords:'X: 200, Y: 70, Z: 300', depend:'主城站', transport:'主世界冰道主站，商业街方向，出站直达。', desc:'玩家交易所聚集地，沿线设有数十家商铺与自动售货机。' },
-    { id:'airport',  name:'空港',     world:'主世界', x:695, y:325, icon:'✈️', owner:'服主',        coords:'X: 400, Y: 80, Z: -600', depend:'主城站', transport:'主世界冰道主站，空港方向，出站即达。', desc:'鞘翅起飞平台与飞行航路检查站，通往各处空岛。' },
-    { id:'harbor',   name:'海港',     world:'主世界', x:560, y:415, icon:'⚓', owner:'服主',        coords:'X: -500, Y: 63, Z: 400', depend:'主城站', transport:'主世界冰道主站，海港方向，出站步行至码头。', desc:'海运航线起点，连通海洋生态群系与沉船遗迹。' },
-    { id:'industry', name:'工业区',   world:'主世界', x:200, y:395, icon:'⚙️', owner:'生电组',     coords:'X: -800, Y: 66, Z: -300', depend:'主城站', transport:'主世界冰道主站，工业区方向，出站即达。', desc:'生电玩家聚集地，高频红石与刷怪塔集中于此。' },
-    { id:'tundra',   name:'雪原站',   world:'主世界', x:105, y:155, icon:'❄️', owner:'—',          coords:'X: 1200, Y: 65, Z: 900', depend:'主城站', transport:'主世界冰道主站，雪原方向，1 站到达。', desc:'通往冰刺之地、雪屋与远古城市。' },
-    { id:'desert',   name:'沙漠站',   world:'主世界', x:170, y:70,  icon:'🏜️', owner:'—',          coords:'X: -1500, Y: 66, Z: 2000', depend:'主城站', transport:'主世界冰道主站，沙漠方向，出站步行。', desc:'通往沙漠神殿、绿洲与金字塔群系。' },
-    { id:'hub',      name:'地狱中枢', world:'地狱',   x:200, y:120, icon:'🔀', owner:'服主',        coords:'X: -10, Y: 128, Z: 10', depend:'主城下界门', transport:'主城下界门步行即达。', desc:'下界交通核心，辐射全图的高速公路网。' },
-    { id:'trade',    name:'猪灵交易所', world:'地狱', x:475, y:405, icon:'💛', owner:'q2qwq',      coords:'X: 120, Y: 128, Z: 60', depend:'地狱中枢', transport:'地狱冰道，猪灵交易所方向，出站即达。', desc:'金锭换物资的自动化交易中心，支持高频兑换。' },
+    {
+      id: 'hub',
+      name: '主城站',
+      world: '主世界',
+      x: 400,
+      y: 235,
+      icon: '🏰',
+      owner: '',
+      coords: 'X: 0, Y: 70, Z: 0',
+      depend: '—',
+      transport: '出生点正前方即为主城传送点，全服线路由此辐射。',
+      desc: '全服交通枢纽与出生点，各线路以此为中心，设有复活点与物资补给箱。'
+    },
+    {
+      id: 'mob-farm',
+      name: '刷怪塔',
+      world: '主世界',
+      x: 150,
+      y: 130,
+      icon: '🧟',
+      owner: '',
+      coords: 'X: -561, Y: 80, Z: -1076',
+      depend: '主城站',
+      transport: '主城冰道西线，刷怪塔站出站步行至塔底挂机点。',
+      desc: '全自动刷怪塔，稳定产出火药、骨头、腐肉、线与箭矢，适合夜间挂机。'
+    },
+    {
+      id: 'sea-temple',
+      name: '海神殿',
+      world: '主世界',
+      x: 200,
+      y: 360,
+      icon: '🌊',
+      owner: '',
+      coords: 'X: -495, Y: 184, Z: -1214',
+      depend: '主城站',
+      transport: '主城冰道西线尽头，出站后向西南飞行约 600 格到达。',
+      desc: '海底神殿遗迹，可获取海绵与海洋之心材料，探索时请备好水下呼吸与夜视。'
+    },
+    {
+      id: 'iron-farm',
+      name: '刷铁机',
+      world: '主世界',
+      x: 640,
+      y: 130,
+      icon: '🤖',
+      owner: '',
+      coords: 'X: 195, Y: 67, Z: 365',
+      depend: '主城站',
+      transport: '主城冰道东线，刷铁机站出站即达。',
+      desc: '经典刷铁机，稳定产出铁锭，位于东部高地，一人即可维护。'
+    },
+    {
+      id: 'iron-farm-2',
+      name: '刷铁机2',
+      world: '主世界',
+      x: 600,
+      y: 260,
+      icon: '⚙️',
+      owner: '',
+      coords: 'X: 65, Y: 96, Z: 624',
+      depend: '村民交易所',
+      transport: '冰道东线村民交易所站出站，步行约 50 格即达。',
+      desc: '双核刷铁机，产出铁锭与虞美人，支持多人同时挂机。'
+    },
+    {
+      id: 'trading-hall',
+      name: '村民交易所',
+      world: '主世界',
+      x: 625,
+      y: 355,
+      icon: '💰',
+      owner: '',
+      coords: 'X: 43, Y: 55, Z: 574',
+      depend: '主城站',
+      transport: '主城冰道东线，村民交易所站出站即达。',
+      desc: '附魔书与绿宝石兑换中心，村民沿河而居，交易每日刷新，铁砧与工作台齐备。'
+    }
   ],
   edges: [
-    ['central','spawn'],['central','market'],['central','airport'],
-    ['central','harbor'],['central','industry'],['central','tundra'],['central','desert'],
-    ['market','airport'],['harbor','industry'],['tundra','desert'],['spawn','desert'],
-    ['hub','trade'],
-  ],
+    ['hub', 'mob-farm'],
+    ['hub', 'sea-temple'],
+    ['hub', 'iron-farm'],
+    ['hub', 'trading-hall'],
+    ['trading-hall', 'iron-farm-2'],
+    ['iron-farm', 'iron-farm-2']
+  ]
 };
 
 /* ---------- 工具 ---------- */
@@ -173,7 +246,7 @@ function renderList(){
       ${s.desc ? `<p class="facility-desc">${escapeHtml(s.desc)}</p>` : ''}
       <div class="facility-meta">
         ${s.coords ? `<span class="meta-chip">📍 坐标 ${escapeHtml(s.coords)}</span>` : ''}
-        ${s.depend ? `<span class="meta-chip">🚉 依赖站点 ${escapeHtml(s.depend)}</span>` : ''}
+        ${s.depend && s.depend !== '—' ? `<span class="meta-chip">🚉 依赖站点 ${escapeHtml(s.depend)}</span>` : ''}
       </div>
       ${s.transport ? `<div class="facility-transport">🚇 接驳：${escapeHtml(s.transport)}</div>` : ''}
     </article>
