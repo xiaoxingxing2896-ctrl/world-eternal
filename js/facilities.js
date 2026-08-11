@@ -354,8 +354,8 @@ $('#sampleBtn').addEventListener('click', ()=>{
 /* ---------- 弹窗：添加路径点 ---------- */
 const overlay = $('#modalOverlay');
 const form = $('#addForm');
-function openModal(){ overlay.hidden = false; document.body.style.overflow = 'hidden'; }
-function closeModal(){ overlay.hidden = true; document.body.style.overflow = ''; form.reset(); }
+function openModal(){ overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeModal(){ overlay.classList.remove('open'); document.body.style.overflow = ''; form.reset(); }
 
 $('#addBtn').addEventListener('click', openModal);
 $('#modalClose').addEventListener('click', closeModal);
