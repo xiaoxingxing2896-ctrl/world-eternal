@@ -1,96 +1,104 @@
 /* =========================================================
-   一辈子存档 · 全景交互式路网 / 交通设施数据库
-   功能：SVG 交互路网 + 设施列表 + 搜索筛选 +
-         JSON 路网文件导入 / 导出 + 弹窗快捷添加路径点
-   数据持久化：localStorage（浏览器本地保存，导入即覆盖）
+   一辈子存档 · 交通网络、公共设施与地标
+   信息架构：与云中城 Cloudsdale /facilities.html 完全一致
+   （名称 / 世界 / 负责人QQ / 产出 / 提示 / 分类 / 坐标 /
+    依赖站点 / 接驳方式）
+   功能：SVG 交互路网 + 设施数据库 + 搜索筛选 +
+         JSON 导入/导出 + 弹窗快捷登记
+   弹窗显示由 .open class 控制（不再依赖 hidden 属性）
    ========================================================= */
 
-const STORAGE_KEY = 'worldeternal_network_v1';
+const STORAGE_KEY = 'worldeternal_network_v2';
 
 /* =========================================================
-   ★ 默认路网数据（已整合：一辈子存档 · 主世界交通路网）
-   想改默认数据直接编辑下面的 stations / edges 即可
+   ★ 默认设施数据（已按云中城字段结构整理）
    ========================================================= */
 const DEFAULT_NETWORK = {
-  meta: { name: '一辈子存档 · 主世界交通路网', version: 2 },
+  meta: { name: '一辈子存档 · 交通路网与设施数据库', version: 2 },
   stations: [
     {
       id: 'hub',
       name: '主城站',
       world: '主世界',
-      x: 400,
-      y: 235,
+      x: 400, y: 235,
       icon: '🏰',
       owner: '',
+      category: '公共设施',
+      output: [],
+      tips: '全服交通枢纽与出生点，各线路以此为中心，设有复活点与物资补给箱。',
       coords: 'X: 0, Y: 70, Z: 0',
       depend: '—',
-      transport: '出生点正前方即为主城传送点，全服线路由此辐射。',
-      desc: '全服交通枢纽与出生点，各线路以此为中心，设有复活点与物资补给箱。'
+      transport: '出生点正前方即为主城传送点，全服线路由此辐射。'
     },
     {
       id: 'mob-farm',
       name: '刷怪塔',
       world: '主世界',
-      x: 150,
-      y: 130,
+      x: 150, y: 130,
       icon: '🧟',
       owner: '',
+      category: '机器',
+      output: ['火药', '骨头', '腐肉', '线', '箭'],
+      tips: '全自动刷怪塔，适合夜间挂机，请从塔顶挂机点进入。',
       coords: 'X: -561, Y: 80, Z: -1076',
       depend: '主城站',
-      transport: '主城冰道西线，刷怪塔站出站步行至塔底挂机点。',
-      desc: '全自动刷怪塔，稳定产出火药、骨头、腐肉、线与箭矢，适合夜间挂机。'
+      transport: '主城冰道西线，刷怪塔站出站步行至塔底挂机点。'
     },
     {
       id: 'sea-temple',
       name: '海神殿',
       world: '主世界',
-      x: 200,
-      y: 360,
+      x: 200, y: 360,
       icon: '🌊',
       owner: '',
+      category: '地标',
+      output: ['海绵', '海洋之心材料'],
+      tips: '海底神殿遗迹，探索时请备好水下呼吸与夜视。',
       coords: 'X: -495, Y: 184, Z: -1214',
       depend: '主城站',
-      transport: '主城冰道西线尽头，出站后向西南飞行约 600 格到达。',
-      desc: '海底神殿遗迹，可获取海绵与海洋之心材料，探索时请备好水下呼吸与夜视。'
+      transport: '主城冰道西线尽头，出站后向西南飞行约 600 格到达。'
     },
     {
       id: 'iron-farm',
       name: '刷铁机',
       world: '主世界',
-      x: 640,
-      y: 130,
+      x: 640, y: 130,
       icon: '🤖',
       owner: '',
+      category: '机器',
+      output: ['铁锭'],
+      tips: '经典刷铁机，稳定产出铁锭，一人即可维护。',
       coords: 'X: 195, Y: 67, Z: 365',
       depend: '主城站',
-      transport: '主城冰道东线，刷铁机站出站即达。',
-      desc: '经典刷铁机，稳定产出铁锭，位于东部高地，一人即可维护。'
+      transport: '主城冰道东线，刷铁机站出站即达。'
     },
     {
       id: 'iron-farm-2',
       name: '刷铁机2',
       world: '主世界',
-      x: 600,
-      y: 260,
+      x: 600, y: 260,
       icon: '⚙️',
       owner: '',
+      category: '机器',
+      output: ['铁锭', '虞美人'],
+      tips: '双核刷铁机，支持多人同时挂机。',
       coords: 'X: 65, Y: 96, Z: 624',
       depend: '村民交易所',
-      transport: '冰道东线村民交易所站出站，步行约 50 格即达。',
-      desc: '双核刷铁机，产出铁锭与虞美人，支持多人同时挂机。'
+      transport: '冰道东线村民交易所站出站，步行约 50 格即达。'
     },
     {
       id: 'trading-hall',
       name: '村民交易所',
       world: '主世界',
-      x: 625,
-      y: 355,
+      x: 625, y: 355,
       icon: '💰',
-      owner: '',
+      owner: 'q2qwq',
+      category: '公共设施',
+      output: ['附魔书', '绿宝石'],
+      tips: '不要动别的箱子，不要动拉杆和按钮。交易每日刷新，铁砧与工作台齐备。',
       coords: 'X: 43, Y: 55, Z: 574',
       depend: '主城站',
-      transport: '主城冰道东线，村民交易所站出站即达。',
-      desc: '附魔书与绿宝石兑换中心，村民沿河而居，交易每日刷新，铁砧与工作台齐备。'
+      transport: '主城冰道东线，村民交易所站出站即达。'
     }
   ],
   edges: [
@@ -114,6 +122,27 @@ function toast(msg){
   clearTimeout(t._timer);
   t._timer = setTimeout(()=>t.classList.remove('show'), 2400);
 }
+function escapeHtml(s){
+  return String(s ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function normalize(st){
+  return {
+    id: st.id || 's_' + Math.random().toString(36).slice(2,8),
+    name: st.name || '未命名',
+    world: st.world || '主世界',
+    x: Math.min(800, Math.max(0, Number(st.x) || 400)),
+    y: Math.min(470, Math.max(0, Number(st.y) || 235)),
+    icon: st.icon || '📍',
+    owner: st.owner || '',
+    category: st.category || '机器',
+    output: Array.isArray(st.output) ? st.output
+          : (st.output ? String(st.output).split(/[,，]/).map(s=>s.trim()).filter(Boolean) : []),
+    tips: st.tips || st.desc || '',
+    coords: st.coords || '',
+    depend: st.depend || '',
+    transport: st.transport || '',
+  };
+}
 
 /* ---------- 数据读写（localStorage） ---------- */
 let network = loadNetwork();
@@ -123,7 +152,10 @@ function loadNetwork(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if(raw){
       const d = JSON.parse(raw);
-      if(d && Array.isArray(d.stations) && Array.isArray(d.edges)) return d;
+      if(d && Array.isArray(d.stations) && Array.isArray(d.edges)){
+        d.stations = d.stations.map(normalize);
+        return d;
+      }
     }
   }catch(e){}
   return JSON.parse(JSON.stringify(DEFAULT_NETWORK));
@@ -146,7 +178,6 @@ function renderMap(){
   const stations = network.stations;
   const edges = network.edges;
 
-  // 站点名标签（先画）
   stations.forEach(s=>{
     const label = document.createElementNS(NS,'text');
     label.setAttribute('x', s.x); label.setAttribute('y', s.y - 26);
@@ -156,7 +187,6 @@ function renderMap(){
     svg.appendChild(label);
   });
 
-  // 线路
   edges.forEach(([a,b])=>{
     const A = stations.find(s=>s.id===a), B = stations.find(s=>s.id===b);
     if(!A || !B) return;
@@ -168,7 +198,6 @@ function renderMap(){
     svg.appendChild(line);
   });
 
-  // 站点（点）
   stations.forEach(s=>{
     const g = document.createElementNS(NS,'g');
     g.setAttribute('class','map-station');
@@ -190,7 +219,7 @@ function renderMap(){
     svg.appendChild(g);
   });
 
-  $('#mapCount').textContent = `${stations.length} 个站点 · ${edges.length} 条线路`;
+  $('#mapCount').textContent = `${stations.length} 个设施 · ${edges.length} 条线路`;
 }
 
 function selectStation(s){
@@ -205,7 +234,6 @@ function selectStation(s){
       .forEach(e=>e.classList.add('active'));
   });
 
-  // 列表滚动定位到对应卡片并高亮
   const card = $(`.facility-card[data-id="${s.id}"]`);
   if(card){
     card.scrollIntoView({behavior:'smooth', block:'center'});
@@ -214,7 +242,7 @@ function selectStation(s){
   }
 }
 
-/* ---------- 渲染设施列表（云中城同构卡片） ---------- */
+/* ---------- 渲染设施列表（云中城字段结构） ---------- */
 function renderList(){
   const list = $('#facilityList');
   const kw = searchKw.trim().toLowerCase();
@@ -222,11 +250,13 @@ function renderList(){
   const filtered = network.stations.filter(s=>{
     if(worldFilter !== '全部' && s.world !== worldFilter) return false;
     if(!kw) return true;
-    const hay = [s.name, s.owner, s.desc, s.depend, s.transport, s.coords].join(' ').toLowerCase();
+    const hay = [s.name, s.owner, s.category, s.tips, s.depend, s.transport, s.coords, ...(s.output||[])]
+      .join(' ').toLowerCase();
     return hay.includes(kw);
   });
 
   $('#listEmpty').hidden = filtered.length !== 0;
+  $('#listCount').textContent = `共 ${filtered.length} 条`;
 
   list.innerHTML = filtered.map(s=>`
     <article class="facility-card card" data-id="${s.id}">
@@ -234,8 +264,11 @@ function renderList(){
         <div class="facility-title">
           <span class="facility-icon">${s.icon || '📍'}</span>
           <div>
-            <h3>${escapeHtml(s.name)}</h3>
-            <span class="facility-world">${s.world || '主世界'}</span>
+            <h3>${escapeHtml(s.name)}${s.owner ? ` <span class="owner-inline">(${escapeHtml(s.owner)})</span>` : ''}</h3>
+            <div class="facility-tags">
+              <span class="facility-world">${escapeHtml(s.world)}</span>
+              <span class="facility-cat">${escapeHtml(s.category)}</span>
+            </div>
           </div>
         </div>
         <div class="facility-actions">
@@ -243,12 +276,21 @@ function renderList(){
           <button class="icon-btn" data-del="${s.id}" title="删除">🗑</button>
         </div>
       </div>
-      ${s.desc ? `<p class="facility-desc">${escapeHtml(s.desc)}</p>` : ''}
+
+      ${(s.output && s.output.length) ? `
+        <div class="facility-output">
+          <span class="field-key">产出</span>
+          <span class="field-val">${s.output.map(o=>`<span class="out-chip">${escapeHtml(o)}</span>`).join('')}</span>
+        </div>` : ''}
+
+      ${s.tips ? `<div class="facility-tips"><span class="field-key">提示</span><p>${escapeHtml(s.tips)}</p></div>` : ''}
+
       <div class="facility-meta">
         ${s.coords ? `<span class="meta-chip">📍 坐标 ${escapeHtml(s.coords)}</span>` : ''}
         ${s.depend && s.depend !== '—' ? `<span class="meta-chip">🚉 依赖站点 ${escapeHtml(s.depend)}</span>` : ''}
       </div>
-      ${s.transport ? `<div class="facility-transport">🚇 接驳：${escapeHtml(s.transport)}</div>` : ''}
+
+      ${s.transport ? `<div class="facility-transport"><span class="field-key">接驳</span><p>${escapeHtml(s.transport)}</p></div>` : ''}
     </article>
   `).join('');
 
@@ -273,17 +315,13 @@ function renderList(){
     btn.addEventListener('click', e=>{
       e.stopPropagation();
       const id = btn.dataset.del;
-      if(!confirm('确定删除该路径点？')) return;
+      if(!confirm('确定删除该设施？')) return;
       network.stations = network.stations.filter(s=>s.id!==id);
       network.edges = network.edges.filter(([a,b])=>a!==id && b!==id);
       saveNetwork(); renderMap(); renderList();
       toast('🗑 已删除');
     });
   });
-}
-
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
 /* ---------- 搜索与筛选 ---------- */
@@ -309,51 +347,46 @@ importFile.addEventListener('change', e=>{
   reader.onload = ev=>{
     try{
       const data = JSON.parse(ev.target.result);
-      if(!Array.isArray(data.stations) || !Array.isArray(data.edges)){
-        throw new Error('格式错误');
-      }
-      // 补默认字段
-      data.stations.forEach(s=>{
-        s.world = s.world || '主世界';
-        s.x = Number(s.x) || 400; s.y = Number(s.y) || 235;
-      });
+      if(!Array.isArray(data.stations) || !Array.isArray(data.edges)) throw new Error('格式错误');
+      data.stations = data.stations.map(normalize);
       network = data;
       saveNetwork();
       renderMap(); renderList();
-      toast(`✅ 已导入路网：${data.stations.length} 个站点 / ${data.edges.length} 条线路`);
+      toast(`✅ 已导入：${data.stations.length} 个设施 / ${data.edges.length} 条线路`);
     }catch(err){
-      toast('❌ 导入失败：JSON 格式不正确（需含 stations 与 edges 数组）');
+      toast('❌ 导入失败：JSON 需含 stations 与 edges 数组');
     }
   };
   reader.readAsText(file);
   e.target.value = '';
 });
 
-/* ---------- 导出路网 ---------- */
+/* ---------- 导出 ---------- */
 $('#exportBtn').addEventListener('click', ()=>{
   const blob = new Blob([JSON.stringify(network, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'worldeternal-network.json';
+  a.download = 'worldeternal-facilities.json';
   a.click();
   URL.revokeObjectURL(a.href);
-  toast('📤 路网数据已导出');
+  toast('📤 已导出');
 });
 
-/* ---------- 下载示例文件 ---------- */
+/* ---------- 示例文件 ---------- */
 $('#sampleBtn').addEventListener('click', ()=>{
   const blob = new Blob([JSON.stringify(DEFAULT_NETWORK, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'worldeternal-network-sample.json';
+  a.download = 'worldeternal-facilities-sample.json';
   a.click();
   URL.revokeObjectURL(a.href);
-  toast('📄 示例文件已下载（可编辑后重新导入）');
+  toast('📄 示例已下载');
 });
 
-/* ---------- 弹窗：添加路径点 ---------- */
+/* ---------- 弹窗（class 控制显示，修复 hidden 覆盖 bug） ---------- */
 const overlay = $('#modalOverlay');
 const form = $('#addForm');
+
 function openModal(){ overlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeModal(){ overlay.classList.remove('open'); document.body.style.overflow = ''; form.reset(); }
 
@@ -365,25 +398,26 @@ overlay.addEventListener('click', e=>{ if(e.target === overlay) closeModal(); })
 form.addEventListener('submit', e=>{
   e.preventDefault();
   const fd = new FormData(form);
-  const id = 's_' + Date.now().toString(36);
-  const station = {
-    id,
-    name: fd.get('name') || '未命名',
-    icon: fd.get('icon') || '📍',
-    world: fd.get('world') || '主世界',
-    owner: fd.get('owner') || '',
-    x: Math.min(800, Math.max(0, Number(fd.get('x')) || 400)),
-    y: Math.min(470, Math.max(0, Number(fd.get('y')) || 235)),
-    coords: fd.get('coords') || '',
-    depend: fd.get('depend') || '',
-    desc: fd.get('desc') || '',
-    transport: fd.get('transport') || '',
-  };
+  const station = normalize({
+    id: 's_' + Date.now().toString(36),
+    name: fd.get('name'),
+    icon: fd.get('icon'),
+    world: fd.get('world'),
+    category: fd.get('category'),
+    owner: fd.get('owner'),
+    x: Number(fd.get('x')),
+    y: Number(fd.get('y')),
+    coords: fd.get('coords'),
+    output: fd.get('output'),
+    depend: fd.get('depend'),
+    tips: fd.get('tips'),
+    transport: fd.get('transport'),
+  });
   network.stations.push(station);
   saveNetwork();
   renderMap(); renderList();
   closeModal();
-  toast(`✅ 已添加路径点：${station.name}`);
+  toast(`✅ 已登记设施：${station.name}`);
   selectStation(station);
 });
 
